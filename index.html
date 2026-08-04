@@ -1,0 +1,2898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="昭熹工作台">
+<meta name="theme-color" content="#f48aa6">
+<meta name="mobile-web-app-capable" content="yes">
+<title>昭熹的工作台</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif; background: #fce4ec; color: #5a3d4f; }
+body { position: relative; }
+:root {
+  --pink-bg: #fde8ee;
+  --pink-soft: #fdd9e3;
+  --pink-mid: #f8b8c9;
+  --pink-deep: #f48aa6;
+  --pink-button: #f5a3b8;
+  --pink-button-deep: #ee8aa3;
+  --text-dark: #4a3340;
+  --text-mid: #7a5d6a;
+  --text-light: #b89aa6;
+  --white: #ffffff;
+  --card-shadow: 0 6px 18px rgba(244, 138, 166, 0.15);
+  --green: #6ec9a3;
+  --blue: #6db9e8;
+  --yellow: #f5d77a;
+  --red: #ef9a9a;
+}
+#app { width: 100vw; height: 100vh; max-width: 514px; margin: 0 auto; background: var(--pink-bg); position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.08); }
+.bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(circle at 20% 10%, #fff5f8 0%, transparent 40%), radial-gradient(circle at 80% 80%, #fff0f5 0%, transparent 50%); }
+
+/* =============== 侧边栏 =============== */
+.sidebar { position: absolute; top: 0; left: 0; width: 84px; height: 100%; background: linear-gradient(180deg, #fce4ec 0%, #f8d2dd 100%); z-index: 100; padding-top: 50px; display: flex; flex-direction: column; align-items: center; gap: 6px; border-right: 1px solid rgba(244,138,166,0.12); overflow-y: auto; overflow-x: hidden; }
+.sidebar::-webkit-scrollbar { display: none; }
+.side-item { width: 72px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 4px 0; border-radius: 12px; transition: all 0.2s; flex-shrink: 0; }
+.side-item.active { background: rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(244,138,166,0.25); }
+.side-icon { width: 56px; height: 60px; position: relative; flex-shrink: 0; }
+/* 头（白脸） */
+.hk-head { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 44px; height: 40px; background: #ffffff; border-radius: 50% 50% 48% 48%; border: 1.5px solid #3d2a2f; box-sizing: border-box; }
+/* 左耳 */
+.hk-ear-l, .hk-ear-r { position: absolute; top: 0; width: 14px; height: 14px; background: #ffffff; border: 1.5px solid #3d2a2f; border-radius: 50%; z-index: 1; }
+.hk-ear-l { left: 7px; }
+.hk-ear-r { right: 7px; }
+/* 眼睛 */
+.hk-eye-l, .hk-eye-r { position: absolute; top: 16px; width: 4px; height: 5px; background: #3d2a2f; border-radius: 50%; }
+.hk-eye-l { left: 14px; }
+.hk-eye-r { right: 14px; }
+/* 鼻子 */
+.hk-nose { position: absolute; top: 21px; left: 50%; transform: translateX(-50%); width: 4px; height: 3px; background: #f5d77a; border-radius: 50%; }
+/* 腮红 */
+.hk-blush-l, .hk-blush-r { position: absolute; top: 23px; width: 6px; height: 4px; background: #ffb8c9; border-radius: 50%; opacity: 0.7; }
+.hk-blush-l { left: 7px; }
+.hk-blush-r { right: 7px; }
+/* 胡须 */
+.hk-whisker { position: absolute; top: 25px; width: 6px; height: 1px; background: #3d2a2f; }
+.hk-whisker.l1 { left: 4px; transform: rotate(15deg); }
+.hk-whisker.l2 { left: 4px; top: 28px; transform: rotate(-10deg); }
+.hk-whisker.r1 { right: 4px; transform: rotate(-15deg); }
+.hk-whisker.r2 { right: 4px; top: 28px; transform: rotate(10deg); }
+/* 蝴蝶结（右上） */
+.hk-bow { position: absolute; top: -2px; right: 6px; width: 18px; height: 14px; z-index: 3; }
+.hk-bow::before, .hk-bow::after { content: ''; position: absolute; top: 0; width: 9px; height: 12px; background: var(--bow-color, #ff9eb5); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; border: 1px solid #ff5a85; }
+.hk-bow::before { left: 0; transform: rotate(-20deg); }
+.hk-bow::after { right: 0; transform: rotate(20deg); }
+.hk-bow-center { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #ff5a85; border-radius: 50%; z-index: 4; }
+/* 身体/小衣服 */
+.hk-body { position: absolute; top: 36px; left: 50%; transform: translateX(-50%); width: 36px; height: 22px; background: var(--dress-color, #ffc7d4); border-radius: 8px 8px 4px 4px; border: 1.5px solid #3d2a2f; border-top: none; box-sizing: border-box; }
+/* 衣服装饰 */
+.hk-body::before { content: ''; position: absolute; top: 3px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+.hk-body::after { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 6px; height: 3px; background: var(--dress-color-dark, #f8a8b8); border-radius: 2px; }
+/* 手臂 */
+.hk-arm-l, .hk-arm-r { position: absolute; top: 40px; width: 6px; height: 8px; background: #ffffff; border: 1px solid #3d2a2f; border-radius: 4px; }
+.hk-arm-l { left: 4px; transform: rotate(20deg); }
+.hk-arm-r { right: 4px; transform: rotate(-20deg); }
+.side-label { font-size: 11px; color: var(--text-dark); font-weight: 600; margin-top: 2px; }
+
+/* =============== 顶部状态栏 =============== */
+.status-bar { position: absolute; top: 0; left: 84px; right: 0; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px 0 12px; font-size: 14px; font-weight: 600; z-index: 50; color: var(--text-dark); background: transparent; }
+.status-icons { display: flex; align-items: center; gap: 6px; }
+.status-icons svg { width: 16px; height: 16px; }
+.battery { background: #ff5a85; color: white; font-size: 11px; padding: 1px 4px; border-radius: 4px; font-weight: 700; }
+
+/* =============== 主内容区 =============== */
+.main { position: absolute; top: 44px; left: 84px; right: 0; bottom: 0; overflow-y: auto; padding: 12px 14px 80px 14px; z-index: 10; background: var(--pink-bg); -webkit-overflow-scrolling: touch; transform: translateZ(0); }
+.main::-webkit-scrollbar { display: none; }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* =============== 通用卡片 =============== */
+.card { background: var(--white); border-radius: 20px; padding: 18px; box-shadow: var(--card-shadow); margin-bottom: 14px; }
+.card-title { font-size: 17px; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+.section-title { font-size: 15px; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 6px; margin: 6px 0 10px; }
+.section-title::before { content: ''; width: 4px; height: 14px; background: var(--pink-deep); border-radius: 2px; }
+
+/* =============== 首页 =============== */
+.greeting { text-align: center; padding: 6px 0 4px; }
+.greeting-time { font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
+.big-time { font-size: 64px; font-weight: 200; color: var(--text-dark); letter-spacing: -2px; line-height: 1; margin: 4px 0; }
+.date-line { font-size: 14px; color: var(--text-dark); margin-bottom: 12px; }
+.date-line .week { color: var(--pink-deep); margin-left: 8px; font-weight: 600; }
+
+.quote-card { background: linear-gradient(135deg, #fff5f8, #ffe4ec); border-radius: 20px; padding: 22px 18px; margin-bottom: 16px; text-align: center; position: relative; box-shadow: var(--card-shadow); }
+.quote-card::before, .quote-card::after { content: '"'; position: absolute; font-size: 40px; color: rgba(244,138,166,0.25); font-family: Georgia, serif; line-height: 1; }
+.quote-card::before { top: 8px; left: 14px; }
+.quote-card::after { bottom: -8px; right: 14px; }
+.quote-cn { font-size: 15px; color: var(--text-dark); line-height: 1.7; margin-bottom: 10px; font-weight: 500; }
+.quote-en { font-size: 12px; color: var(--text-light); font-style: italic; line-height: 1.5; }
+
+.checkin-section { margin-top: 6px; }
+.checkin-title { font-size: 17px; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+.checkin-title::before { content: ''; width: 5px; height: 5px; background: var(--pink-deep); border-radius: 50%; }
+.checkin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.checkin-item { background: var(--white); border-radius: 16px; padding: 12px 6px; text-align: center; box-shadow: 0 3px 10px rgba(244,138,166,0.12); cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+.checkin-item.done { background: linear-gradient(135deg, #fff0f4, #ffd9e3); }
+.checkin-item.done::after { content: '✓'; position: absolute; top: 4px; right: 6px; color: var(--pink-deep); font-size: 14px; font-weight: 700; }
+.checkin-emoji { font-size: 24px; margin-bottom: 4px; }
+.checkin-name { font-size: 12px; color: var(--text-dark); font-weight: 600; }
+.checkin-item.done .checkin-name { color: var(--pink-deep); }
+
+.summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.summary-mini { background: var(--white); border-radius: 16px; padding: 12px; box-shadow: var(--card-shadow); }
+.summary-mini h4 { font-size: 12px; color: var(--text-light); margin-bottom: 6px; }
+.summary-num { font-size: 22px; font-weight: 700; color: var(--pink-deep); }
+.summary-mini p { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+/* =============== 按钮 =============== */
+.btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--pink-button), var(--pink-button-deep)); color: white; border: none; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(244,138,166,0.3); display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; }
+.btn-primary:active { transform: scale(0.97); }
+.btn-secondary { padding: 8px 16px; background: white; color: var(--pink-deep); border: 1.5px solid var(--pink-deep); border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-soft { padding: 6px 14px; background: #fff0f4; color: var(--pink-deep); border: none; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.btn-tiny { padding: 3px 8px; background: #fff; color: var(--pink-deep); border: 1px solid var(--pink-mid); border-radius: 12px; font-size: 11px; cursor: pointer; margin-left: 4px; }
+.btn-icon { width: 28px; height: 28px; background: #fff0f4; color: var(--pink-deep); border: none; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+
+/* =============== 输入框 =============== */
+.input, .textarea, .select { width: 100%; padding: 12px 14px; background: #fff5f8; border: 1.5px solid #fdd9e3; border-radius: 14px; font-size: 14px; color: var(--text-dark); outline: none; transition: all 0.2s; font-family: inherit; }
+.input:focus, .textarea:focus, .select:focus { border-color: var(--pink-deep); background: white; }
+.textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
+.label { display: block; font-size: 12px; color: var(--text-mid); margin-bottom: 6px; font-weight: 600; }
+.form-row { margin-bottom: 12px; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* =============== 列表项 =============== */
+.list-item { background: white; border-radius: 16px; padding: 14px; margin-bottom: 10px; box-shadow: 0 3px 10px rgba(244,138,166,0.1); display: flex; align-items: center; gap: 10px; }
+.list-item .emoji { font-size: 20px; width: 36px; height: 36px; background: #fff5f8; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.list-item .body { flex: 1; }
+.list-item .title { font-size: 14px; color: var(--text-dark); font-weight: 600; margin-bottom: 2px; }
+.list-item .meta { font-size: 11px; color: var(--text-light); }
+.list-item.done { opacity: 0.6; }
+.list-item.done .title { text-decoration: line-through; }
+
+/* =============== 子导航 =============== */
+.subnav { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
+.subnav::-webkit-scrollbar { display: none; }
+.subnav-item { flex-shrink: 0; padding: 6px 14px; background: white; border-radius: 18px; font-size: 12px; color: var(--text-mid); cursor: pointer; border: 1.5px solid transparent; white-space: nowrap; }
+.subnav-item.active { background: var(--pink-deep); color: white; box-shadow: 0 2px 8px rgba(244,138,166,0.3); }
+
+/* =============== 页面标题 =============== */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding: 4px 0; }
+.page-title { font-size: 20px; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+.page-title .ico { font-size: 22px; }
+.page-tag { padding: 5px 12px; background: white; border-radius: 14px; font-size: 11px; color: var(--text-mid); box-shadow: 0 2px 6px rgba(244,138,166,0.1); }
+
+/* =============== 模态框 =============== */
+.modal-mask { position: fixed; inset: 0; background: rgba(74,51,64,0.4); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal-mask.active { display: flex; animation: fadeIn 0.2s; }
+.modal { background: white; border-radius: 24px; padding: 22px; width: 100%; max-width: 380px; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+.modal h3 { font-size: 17px; color: var(--text-dark); margin-bottom: 14px; font-weight: 700; }
+
+/* =============== 财务表格 =============== */
+.fin-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.fin-table th { background: #fff0f4; color: var(--text-dark); padding: 8px 4px; text-align: center; font-weight: 700; border: 1px solid #fdd9e3; }
+.fin-table td { padding: 6px 4px; border: 1px solid #fdd9e3; text-align: center; background: white; }
+.fin-table td.cat { font-weight: 600; color: var(--text-dark); text-align: left; padding-left: 8px; }
+.fin-table td input { width: 100%; border: none; text-align: center; font-size: 12px; color: var(--text-dark); outline: none; padding: 4px; background: transparent; font-family: inherit; }
+.fin-table td.total { background: #fff5f8; font-weight: 700; color: var(--pink-deep); }
+.fin-table .row-income td { color: var(--green); font-weight: 600; }
+.fin-table .row-income td.cat { color: var(--green); }
+
+/* =============== 日历 =============== */
+.calendar { background: white; border-radius: 16px; padding: 14px; box-shadow: var(--card-shadow); }
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cal-title { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+.cal-nav { display: flex; gap: 6px; }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+.cal-weekday { text-align: center; font-size: 11px; color: var(--text-light); font-weight: 600; padding: 4px 0; }
+.cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; color: var(--text-dark); border-radius: 8px; cursor: pointer; background: #fff5f8; transition: all 0.2s; position: relative; padding: 2px; }
+.cal-day:hover { background: #fdd9e3; }
+.cal-day.empty { background: transparent; cursor: default; }
+.cal-day.today { background: var(--pink-deep); color: white; font-weight: 700; }
+.cal-day.holiday { background: #ffe0e0; color: #d05050; }
+.cal-day.workday { background: #fff8e0; }
+.cal-day.has-event::after { content: ''; position: absolute; bottom: 3px; width: 4px; height: 4px; background: var(--pink-deep); border-radius: 50%; }
+.cal-day.holiday::after { background: #d05050; }
+.cal-day .num { font-weight: 600; }
+.cal-day .tag { font-size: 8px; margin-top: 1px; opacity: 0.85; }
+
+/* =============== 打卡日历 =============== */
+.weight-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 8px; }
+.weight-day { aspect-ratio: 1; background: #fff5f8; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: var(--text-dark); cursor: pointer; position: relative; }
+.weight-day.recorded { background: var(--pink-deep); color: white; }
+.weight-day.period { background: #ffd9d9; }
+.weight-day .w { font-size: 10px; font-weight: 700; }
+.weight-day .p { font-size: 8px; opacity: 0.8; }
+
+/* =============== 日记编辑器 =============== */
+.diary-page { background: #fffaf3; min-height: calc(100vh - 200px); border-radius: 16px; padding: 16px; box-shadow: var(--card-shadow); }
+.diary-page .textarea { background: transparent; border: none; min-height: 400px; font-size: 15px; line-height: 1.8; color: var(--text-dark); padding: 0; }
+.diary-page .textarea:focus { background: transparent; }
+
+/* =============== 评分 =============== */
+.score-card { background: linear-gradient(135deg, #fff0f4, #ffe4ec); border-radius: 20px; padding: 18px; box-shadow: var(--card-shadow); }
+.score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.score-label { font-size: 13px; color: var(--text-dark); width: 70px; font-weight: 600; }
+.score-bar { flex: 1; height: 8px; background: #fff; border-radius: 4px; overflow: hidden; }
+.score-fill { height: 100%; background: linear-gradient(90deg, #ffb8c9, #ff7da0); border-radius: 4px; transition: width 0.3s; }
+.score-input { width: 60px; padding: 4px 8px; background: white; border: 1.5px solid #fdd9e3; border-radius: 8px; font-size: 12px; text-align: center; color: var(--text-dark); outline: none; }
+.score-total { text-align: center; padding: 14px; background: white; border-radius: 14px; margin-top: 10px; }
+.score-total .num { font-size: 32px; font-weight: 700; color: var(--pink-deep); }
+.score-total .label { font-size: 12px; color: var(--text-light); }
+
+/* =============== 文档列表 =============== */
+.doc-card { background: white; border-radius: 16px; padding: 14px; margin-bottom: 10px; box-shadow: 0 3px 10px rgba(244,138,166,0.1); display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.doc-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #ffd9e3, #f8b8c9); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
+.doc-info { flex: 1; }
+.doc-title { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; }
+.doc-meta { font-size: 11px; color: var(--text-light); }
+.doc-arrow { color: var(--text-light); font-size: 18px; }
+
+/* =============== 36*10 列表 =============== */
+.ten-list { background: white; border-radius: 12px; padding: 10px; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(244,138,166,0.08); }
+.ten-item { display: flex; align-items: center; gap: 8px; padding: 6px; border-bottom: 1px solid #fff0f4; }
+.ten-item:last-child { border-bottom: none; }
+.ten-date { width: 60px; font-size: 12px; color: var(--text-dark); font-weight: 600; flex-shrink: 0; }
+.ten-content { flex: 1; }
+.ten-content input { width: 100%; border: none; background: #fff5f8; border-radius: 8px; padding: 5px 8px; font-size: 12px; color: var(--text-dark); outline: none; }
+.ten-status { width: 80px; }
+.ten-status select { width: 100%; border: none; background: #fff5f8; border-radius: 8px; padding: 5px 4px; font-size: 11px; color: var(--text-dark); outline: none; }
+
+/* =============== 60天模块 =============== */
+.day-block { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin: 10px 0; }
+.day-cell { aspect-ratio: 1; background: #fff5f8; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-light); cursor: pointer; }
+.day-cell.done { background: var(--pink-deep); color: white; }
+.day-cell.today { border: 2px solid var(--pink-deep); }
+
+/* =============== 工具提示 =============== */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-light); }
+.empty-state .emoji { font-size: 40px; margin-bottom: 10px; }
+.empty-state p { font-size: 13px; line-height: 1.6; }
+
+/* =============== 时间线 =============== */
+.timeline { position: relative; padding-left: 20px; }
+.timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: #fdd9e3; }
+.timeline-item { position: relative; padding-bottom: 14px; }
+.timeline-item::before { content: ''; position: absolute; left: -18px; top: 4px; width: 10px; height: 10px; background: var(--pink-deep); border-radius: 50%; border: 2px solid white; }
+.timeline-time { font-size: 11px; color: var(--pink-deep); font-weight: 700; margin-bottom: 2px; }
+.timeline-content { background: white; border-radius: 12px; padding: 10px 12px; box-shadow: 0 2px 6px rgba(244,138,166,0.1); font-size: 13px; color: var(--text-dark); }
+
+/* =============== 月度列表式日历 =============== */
+.mv-day-cell { background: transparent; border-radius: 8px; padding: 4px 2px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; min-height: 70px; }
+.mv-day-cell:hover { background: #fff5f8; }
+.mv-day-cell.today { background: #fff0f4; box-shadow: inset 0 0 0 1.5px var(--pink-deep); }
+.mv-day-cell.holiday .mv-day-num { color: #d05050; }
+.mv-day-head { display: flex; align-items: baseline; gap: 2px; margin-bottom: 2px; }
+.mv-day-num { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+.mv-day-cell.today .mv-day-num { background: var(--pink-deep); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+.mv-day-lunar { font-size: 9px; color: var(--text-light); }
+.mv-day-cell.holiday .mv-day-lunar { color: #d05050; }
+.mv-day-events { display: flex; flex-direction: column; gap: 2px; }
+.mv-event-tag { font-size: 9px; padding: 1px 4px; border-radius: 4px; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+.mv-add-hint { font-size: 10px; color: var(--text-light); text-align: center; padding: 2px; opacity: 0.4; }
+.mv-day-cell:hover .mv-add-hint { opacity: 1; color: var(--pink-deep); }
+
+/* =============== 待办 =============== */
+.todo-item { background: white; border-radius: 16px; padding: 14px; margin-bottom: 10px; box-shadow: 0 3px 10px rgba(244,138,166,0.1); display: flex; align-items: center; gap: 12px; }
+.todo-check { width: 22px; height: 22px; border: 2px solid var(--pink-mid); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.todo-check.checked { background: var(--pink-deep); border-color: var(--pink-deep); color: white; font-size: 13px; }
+.todo-body { flex: 1; }
+.todo-title { font-size: 14px; color: var(--text-dark); font-weight: 600; }
+.todo-item.done .todo-title { text-decoration: line-through; opacity: 0.5; }
+.todo-meta { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+.priority { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 10px; margin-right: 4px; }
+.priority-high { background: #ffe0e0; color: #d05050; }
+.priority-mid { background: #fff0d9; color: #d09050; }
+.priority-low { background: #e0f0ff; color: #5090d0; }
+
+/* =============== 添加按钮 =============== */
+.fab { position: fixed; bottom: 24px; right: 24px; width: 50px; height: 50px; background: linear-gradient(135deg, var(--pink-button), var(--pink-button-deep)); color: white; border: none; border-radius: 50%; font-size: 24px; box-shadow: 0 6px 20px rgba(244,138,166,0.5); cursor: pointer; z-index: 90; display: flex; align-items: center; justify-content: center; }
+
+/* =============== 评分历史 =============== */
+.score-history { background: white; border-radius: 16px; padding: 14px; margin-top: 12px; box-shadow: var(--card-shadow); }
+.score-day { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #fff0f4; }
+.score-day:last-child { border-bottom: none; }
+.score-date { width: 90px; font-size: 12px; color: var(--text-mid); }
+.score-val { font-size: 18px; font-weight: 700; color: var(--pink-deep); width: 50px; }
+.score-quote { flex: 1; font-size: 12px; color: var(--text-light); font-style: italic; }
+
+/* =============== 工具类 =============== */
+.row { display: flex; align-items: center; gap: 8px; }
+.between { display: flex; align-items: center; justify-content: space-between; }
+.mt-10 { margin-top: 10px; }
+.mb-10 { margin-bottom: 10px; }
+.text-pink { color: var(--pink-deep); }
+.text-light { color: var(--text-light); font-size: 12px; }
+.tag-pill { display: inline-block; padding: 2px 8px; background: #fff0f4; color: var(--pink-deep); border-radius: 10px; font-size: 11px; margin-right: 4px; }
+
+/* 滚动 */
+.tabs-fixed { position: sticky; top: 0; background: var(--pink-bg); padding: 8px 0; z-index: 5; }
+
+/* 响应式 */
+@media (min-width: 431px) {
+  #app { max-width: 430px; }
+}
+
+</style>
+<script src="https://beacon.cdn.qq.com/sdk/4.5.9/beacon_web.min.js"></script>
+<script>
+(function(){
+  try{
+    var beacon=new BeaconAction({
+      appkey:'0WEB06U85YBSLJNL',
+      versionCode:'1.0.0',
+      channelID:'share',
+      delay:1000,
+      sessionDuration:30*60*1000,
+      isOversea:false,
+      needReportRqdEvent:false
+    });
+    beacon.onDirectUserAction('preview_page_view',{
+      'url':location.href,
+      'referrer':document.referrer,
+      'title':document.title,
+      'sandbox_id':'5d2273cf753b40c499ca5127e9f82f9f'
+    });
+  }catch(e){}
+})();
+</script></head>
+<body>
+<div id="app">
+  <div class="bg-deco"></div>
+  <div class="status-bar">
+    <span id="statusTime">21:13</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V2L2 22z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 2.7 5.6 0 9.6L12 22l12-12.4C21.3 5.6 17 3 12 3z"/></svg>
+      <span class="battery" id="batteryLevel">9</span>
+    </div>
+  </div>
+
+  <!-- 侧边栏 -->
+  <div class="sidebar" id="sidebar"></div>
+
+  <!-- 主内容区 -->
+  <div class="main" id="main"></div>
+
+  <!-- 模态框 -->
+  <div class="modal-mask" id="modalMask">
+    <div class="modal" id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+// =============== 数据存储 ===============
+const STORE_KEY = 'zhaoxi_workbench_v2';
+const defaultData = {
+  user: { name: '舒婷' },
+  checkins: {}, // { '2026-07-31': { 开心: true, ... } }
+  todos: [], // { id, title, date, priority, done }
+  schedule: {}, // { '2026-07-31': [{time, content}] }
+  monthEvents: {}, // { '2026-07-31': [{id, content, category}] } —— 月度格子事项（与今日重点同步）
+  focusEvents: {}, // { '2026-07-31': '今日重点文本' } —— 今日重点（与月度事项同源）
+  importantDocs: [], // { id, title, createdAt, content }
+  yearPlans: [],
+  monthPlans: [],
+  notebooks: [], // { id, title, createdAt, content } —— 笔记本
+  finances: {}, // { '2026-07': { rows: {...}, incomeDetail: {...} } }
+  happiness: { 舒婷: '', 毕生所愿: '', '2027-10-18': '', 妈妈: '', 灰灰: '', 姐姐妹妹: '', 旅游计划: '', 我的婚礼: '', 我的家: '', 爱用清单: '', 欲望清单: '' },
+  weight: {}, // { '2026-07-31': { weight, period } }
+  shaping: { 天鹅颈: '', 直角肩: '', 沙漏腰: '', 蜜桃臀: '', 酒杯腿: '', 软开: '' },
+  beautyDiary: '',
+  appearance: { 穿搭: '', 化妆: '', 造型: '', poss: '' },
+  routineDiary: '',
+  healthCustom: {}, // 健康美丽-自定义子标签日记
+  skills: [],
+  growthCustom: {}, // 个人提升-自定义子标签日记
+  tenGroups: {}, // { '2026-08': [{content1, status1, content2, status2}, ...3组] }
+  sixtyDays: [], // { id, startDate, days: [{date, done, note}], summary }
+  scores: {}, // { '2026-07-31': { work, life, health, growth, quote, total } }
+  scheduleDate: '', // 日程-今日选中的日期
+  scoreDate: '' // 打分系统选中的日期
+};
+
+let data = loadData();
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return Object.assign(JSON.parse(JSON.stringify(defaultData)), JSON.parse(raw));
+    // v1数据迁移
+    const v1 = localStorage.getItem('zhaoxi_workbench_v1');
+    if (v1) {
+      const migrated = Object.assign(JSON.parse(JSON.stringify(defaultData)), JSON.parse(v1));
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(migrated)); } catch(e) {}
+      return migrated;
+    }
+    // 尝试从备份恢复
+    const backup = localStorage.getItem(STORE_KEY + '_backup');
+    if (backup) return Object.assign(JSON.parse(JSON.stringify(defaultData)), JSON.parse(backup));
+  } catch(e) {
+    console.warn('数据加载异常，尝试备份:', e);
+    try {
+      const backup = localStorage.getItem(STORE_KEY + '_backup');
+      if (backup) return Object.assign(JSON.parse(JSON.stringify(defaultData)), JSON.parse(backup));
+    } catch(e2) {}
+  }
+  return JSON.parse(JSON.stringify(defaultData));
+}
+
+// 防抖保存：避免频繁输入时频繁写入
+let saveTimer = null;
+let savePending = false;
+function saveData() {
+  savePending = true;
+  if (saveTimer) return;
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    if (!savePending) return;
+    savePending = false;
+    _doSave();
+  }, 150);
+}
+// 立即保存（用于关键操作）
+function saveDataNow() {
+  if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+  savePending = false;
+  _doSave();
+}
+function _doSave() {
+  try {
+    const str = JSON.stringify(data);
+    localStorage.setItem(STORE_KEY, str);
+    // 同时写入备份（每次主数据超过10KB才备份，避免频繁写入）
+    if (str.length > 10000) {
+      try { localStorage.setItem(STORE_KEY + '_backup', str); } catch(e) {}
+    }
+  } catch(e) {
+    // 主存储写入失败（如配额超限），尝试清理旧备份后重试
+    try {
+      localStorage.removeItem(STORE_KEY + '_backup');
+      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+    } catch(e2) {
+      console.error('保存失败:', e2);
+      showToast('⚠️ 存储空间不足，建议导出备份');
+    }
+  }
+}
+
+// 页面卸载前立即保存
+window.addEventListener('beforeunload', () => { saveDataNow(); });
+window.addEventListener('pagehide', () => { saveDataNow(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') saveDataNow();
+});
+
+// 定时自动保存（每30秒）
+setInterval(() => { saveDataNow(); }, 30000);
+
+let currentPage = 'home';
+let currentSubPage = {};
+let currentDoc = null;
+let currentDate = formatDateKey(new Date());
+
+function formatDateKey(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+function getToday() { return new Date(); }
+function getWeekday(d) { return ['日','一','二','三','四','五','六'][d.getDay()]; }
+function formatDate(d) {
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+// =============== 侧边栏 ===============
+const menuItems = [
+  { key: 'home', label: '首页', bow: '#ff9eb5', dress: '#ffc7d4' },
+  { key: 'schedule', label: '日程', bow: '#b8c5ff', dress: '#c7d4ff' },
+  { key: 'self', label: '自我管理', bow: '#ffd29e', dress: '#ffe0b8' },
+  { key: 'happiness', label: '幸福生活', bow: '#ffb8e3', dress: '#ffc7e8' },
+  { key: 'health', label: '健康美丽', bow: '#a8e6c1', dress: '#b8e6c7' },
+  { key: 'growth', label: '个人提升', bow: '#f5d77a', dress: '#f7e29e' },
+  { key: 'score', label: '打分系统', bow: '#c5b8ff', dress: '#d4c7ff' },
+  { key: 'notebook', label: '笔记本', bow: '#ffcba4', dress: '#ffd9c0' }
+];
+
+function helloKittyIcon(bow, dress) {
+  return `<div class="side-icon">
+    <div class="hk-ear-l"></div>
+    <div class="hk-ear-r"></div>
+    <div class="hk-head"></div>
+    <div class="hk-eye-l"></div>
+    <div class="hk-eye-r"></div>
+    <div class="hk-nose"></div>
+    <div class="hk-blush-l"></div>
+    <div class="hk-blush-r"></div>
+    <div class="hk-whisker l1"></div>
+    <div class="hk-whisker l2"></div>
+    <div class="hk-whisker r1"></div>
+    <div class="hk-whisker r2"></div>
+    <div class="hk-arm-l"></div>
+    <div class="hk-arm-r"></div>
+    <div class="hk-body" style="--dress-color:${dress};--dress-color-dark:${dress};"></div>
+    <div class="hk-bow" style="--bow-color:${bow};"></div>
+    <div class="hk-bow-center"></div>
+  </div>`;
+}
+
+function renderSidebar() {
+  const sb = document.getElementById('sidebar');
+  sb.innerHTML = menuItems.map(m => `
+    <div class="side-item ${currentPage === m.key ? 'active' : ''}" data-page="${m.key}">
+      ${helloKittyIcon(m.bow, m.dress)}
+      <div class="side-label">${m.label}</div>
+    </div>
+  `).join('');
+  sb.querySelectorAll('.side-item').forEach(el => {
+    el.onclick = () => navigateTo(el.dataset.page);
+  });
+}
+
+// =============== 导航 ===============
+function navigateTo(page, sub) {
+  currentPage = page;
+  if (sub !== undefined) currentSubPage[page] = sub;
+  if (!currentSubPage[page]) currentSubPage[page] = Object.keys(subPagesConfig[page] || {'main': null})[0];
+  renderSidebar();
+  renderPage();
+}
+
+const subPagesConfig = {
+  schedule: { today: '今日', month: '月度', year: '年度' },
+  self: { important: '重要目标', year: '年度计划', month: '月度计划', finance: '财务计划' },
+  happiness: { 舒婷: '舒婷', 毕生所愿: '毕生所愿', '2027-10-18': '2027-10-18', 妈妈: '妈妈', 灰灰: '灰灰', 姐姐妹妹: '姐姐妹妹', 旅游计划: '旅游计划', 我的婚礼: '我的婚礼', 我的家: '我的家', 爱用清单: '爱用清单', 欲望清单: '欲望清单' },
+  health: { weight: '体重', shaping: '塑形', beauty: '美貌', appearance: '外观', routine: '作息' },
+  growth: { skill: '技能提升', ten: '36*10', sixty: '60天' },
+  score: { main: '今日打分' },
+  notebook: { main: '笔记本' }
+};
+
+// =============== 渲染 ===============
+function renderPage() {
+  const main = document.getElementById('main');
+  const renderers = {
+    home: renderHome,
+    schedule: renderSchedule,
+    self: renderSelf,
+    happiness: renderHappiness,
+    health: renderHealth,
+    growth: renderGrowth,
+    score: renderScore,
+    notebook: renderNotebook
+  };
+  const html = (renderers[currentPage] || renderHome)();
+  main.innerHTML = `<div class="page active">${html}</div>`;
+  bindPageEvents();
+  main.scrollTop = 0;
+}
+
+// =============== 首页 ===============
+const quotes = [
+  { cn: '种一棵树最好的时间是十年前，其次是现在。', en: 'The best time to plant a tree was ten years ago. The second best time is now.' },
+  { cn: '慢慢来，一切都在变好。', en: 'Take it slow, everything is getting better.' },
+  { cn: '愿你成为自己的太阳，无需凭借谁的光。', en: 'Be your own sun, no need to rely on anyone\'s light.' },
+  { cn: '你今天的努力，是幸运的伏笔。', en: 'Your effort today is the foreshadowing of luck.' },
+  { cn: '生活明朗，万物可爱，未来可期。', en: 'Life is bright, everything is lovely, the future is promising.' },
+  { cn: '温柔半两，从容一生。', en: 'A little tenderness, a lifetime of composure.' }
+];
+function getTodayQuote() {
+  const idx = new Date().getDate() % quotes.length;
+  return quotes[idx];
+}
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 6) return '凌晨好';
+  if (h < 11) return '早上好';
+  if (h < 13) return '中午好';
+  if (h < 18) return '下午好';
+  return '晚上好';
+}
+function getDailyGreeting() {
+  const h = new Date().getHours();
+  if (h < 6) return '夜深啦，记得早点休息哦';
+  if (h < 11) return '新的一天，加油呀';
+  if (h < 13) return '中午啦，记得吃午饭';
+  if (h < 18) return '下午茶时光到啦';
+  if (h < 22) return '晚上好呀';
+  return '夜深啦，记得早点休息哦';
+}
+
+const checkinItems = [
+  { key: '开心', emoji: '😊' },
+  { key: '工作', emoji: '💼' },
+  { key: '早起', emoji: '🌅' },
+  { key: '早睡', emoji: '🌙' },
+  { key: '16+8', emoji: '⏰' },
+  { key: '运动', emoji: '🏃' },
+  { key: '拉伸', emoji: '🤸' },
+  { key: '阅读', emoji: '📖' },
+  { key: '提升', emoji: '✨' },
+  { key: '浇花', emoji: '🌷' },
+  { key: '遛狗', emoji: '🐕' }
+];
+
+function renderHome() {
+  const now = getToday();
+  const quote = getTodayQuote();
+  const todayCheckins = data.checkins[currentDate] || {};
+  const monthKey = currentDate.substring(0, 7);
+  const yearKey = currentDate.substring(0, 4);
+  let monthCount = 0, monthTotal = 0;
+  let yearCount = 0, yearTotal = 0;
+  Object.keys(data.checkins).forEach(dk => {
+    const obj = data.checkins[dk];
+    const done = Object.values(obj).filter(v => v).length;
+    if (dk.startsWith(monthKey)) { monthCount += done; monthTotal += 11; }
+    if (dk.startsWith(yearKey)) { yearCount += done; yearTotal += 11; }
+  });
+  // 计算月数和年数
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const dayOfYear = Math.ceil((now - new Date(yearKey, 0, 1)) / 86400000);
+
+  return `
+    <div class="greeting">
+      <div class="greeting-time">${getGreeting()}，${data.user.name}~</div>
+      <div class="big-time" id="bigTime">${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}</div>
+      <div class="date-line">${formatDate(now)}<span class="week">星期${getWeekday(now)}</span></div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-cn">${quote.cn}</div>
+      <div class="quote-en">${quote.en}</div>
+    </div>
+    <div class="checkin-section">
+      <div class="checkin-title">每日打卡</div>
+      <div class="checkin-grid">
+        ${checkinItems.map(it => `
+          <div class="checkin-item ${todayCheckins[it.key] ? 'done' : ''}" data-key="${it.key}">
+            <div class="checkin-emoji">${it.emoji}</div>
+            <div class="checkin-name">${it.key}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="summary-row">
+        <div class="summary-mini">
+          <h4>本月打卡</h4>
+          <div class="summary-num">${monthCount}<span style="font-size:12px;color:var(--text-light);">/${monthTotal || 11*daysInMonth}</span></div>
+          <p>已坚持 ${new Date().getDate()} 天</p>
+        </div>
+        <div class="summary-mini">
+          <h4>年度打卡</h4>
+          <div class="summary-num">${yearCount}<span style="font-size:12px;color:var(--text-light);">/${yearTotal || 11*dayOfYear}</span></div>
+          <p>已过去 ${dayOfYear} 天</p>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">📊 今日概览</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+        <div style="padding:10px;background:#fff5f8;border-radius:12px;">
+          <div style="color:var(--text-light);font-size:11px;">已完成打卡</div>
+          <div style="color:var(--pink-deep);font-size:22px;font-weight:700;">${Object.values(todayCheckins).filter(v=>v).length}/11</div>
+        </div>
+        <div style="padding:10px;background:#fff5f8;border-radius:12px;">
+          <div style="color:var(--text-light);font-size:11px;">今日待办</div>
+          <div style="color:var(--pink-deep);font-size:22px;font-weight:700;">${(data.todos||[]).filter(t=>!t.done && t.date===currentDate).length}</div>
+        </div>
+        <div style="padding:10px;background:#fff5f8;border-radius:12px;">
+          <div style="color:var(--text-light);font-size:11px;">今日日程</div>
+          <div style="color:var(--pink-deep);font-size:22px;font-weight:700;">${(data.schedule[currentDate]||[]).length}</div>
+        </div>
+        <div style="padding:10px;background:#fff5f8;border-radius:12px;">
+          <div style="color:var(--text-light);font-size:11px;">今日分数</div>
+          <div style="color:var(--pink-deep);font-size:22px;font-weight:700;">${(data.scores[currentDate]||{}).total || '-'}</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text-light);">${getDailyGreeting()} 🌷</div>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#fff5f8,#ffe4ec);">
+      <div class="card-title">💾 数据备份与同步</div>
+      <div style="font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:10px;">
+        所有数据已自动保存在本设备，刷新不丢失。<br>
+        建议定期导出备份或开启云端同步，换设备也能用。
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="btn-secondary" id="exportDataBtn">📤 导出备份</button>
+        <button class="btn-secondary" id="importDataBtn">📥 导入恢复</button>
+      </div>
+      <button class="btn-primary" id="cloudSyncBtn" style="margin-top:8px;background:linear-gradient(135deg,#a8d8e8,#6db9e8);">☁️ 云端同步（换设备可用）</button>
+      <input type="file" id="importFileInput" accept=".json" style="display:none;">
+      <div id="storageInfo" style="margin-top:8px;font-size:11px;color:var(--text-light);text-align:center;"></div>
+    </div>
+  `;
+}
+
+function bindBackupEvents() {
+  const exportBtn = document.getElementById('exportDataBtn');
+  if (exportBtn) {
+    exportBtn.onclick = () => {
+      saveDataNow();
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `昭熹工作台_备份_${currentDate}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('备份已导出 ✨');
+    };
+  }
+  const importBtn = document.getElementById('importDataBtn');
+  const fileInput = document.getElementById('importFileInput');
+  if (importBtn && fileInput) {
+    importBtn.onclick = () => fileInput.click();
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (confirm('确认导入备份吗？当前数据将被覆盖。')) {
+            data = Object.assign(JSON.parse(JSON.stringify(defaultData)), imported);
+            saveDataNow();
+            showToast('恢复成功 ✨');
+            renderPage();
+          }
+        } catch (err) {
+          alert('文件格式错误，请选择正确的备份文件');
+        }
+      };
+      reader.readAsText(file);
+    };
+  }
+  // 云端同步按钮
+  const cloudSyncBtn = document.getElementById('cloudSyncBtn');
+  if (cloudSyncBtn) {
+    cloudSyncBtn.onclick = openCloudSyncDialog;
+  }
+  // 显示存储信息
+  const info = document.getElementById('storageInfo');
+  if (info) {
+    try {
+      const str = JSON.stringify(data);
+      const kb = (str.length / 1024).toFixed(1);
+      const syncTime = localStorage.getItem('zhaoxi_last_cloud_sync');
+      const syncStr = syncTime ? ` · 上次云端同步：${syncTime}` : '';
+      info.textContent = `已使用 ${kb} KB · 自动保存已开启${syncStr}`;
+    } catch(e) {}
+  }
+}
+
+// =============== 云端同步（基于 GitHub Gist，完全免费） ===============
+function openCloudSyncDialog() {
+  const savedToken = localStorage.getItem('zhaoxi_gist_token') || '';
+  const savedGistId = localStorage.getItem('zhaoxi_gist_id') || '';
+  showModal('☁️ 云端同步', `
+    <div style="font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:12px;">
+      通过 GitHub Gist 实现免费云端同步，换设备也能恢复数据。<br>
+      <b>只需配置一次</b>，之后点「上传/下载」即可。
+    </div>
+    <div class="form-row">
+      <label class="label">GitHub Token <span style="font-weight:400;color:var(--text-light);">(用于云端存储)</span></label>
+      <input class="input" id="gistToken" value="${escapeAttr(savedToken)}" placeholder="ghp_..." type="password">
+      <div style="font-size:11px;color:var(--text-light);margin-top:4px;">获取方式：GitHub → Settings → Developer settings → Personal access tokens → Generate new token（只需 gist 权限）</div>
+    </div>
+    <div class="form-row">
+      <label class="label">Gist ID <span style="font-weight:400;color:var(--text-light);">(留空则自动创建)</span></label>
+      <input class="input" id="gistId" value="${escapeAttr(savedGistId)}" placeholder="首次使用留空">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+      <button class="btn-primary" id="cloudUploadBtn" style="background:linear-gradient(135deg,#a8d8e8,#6db9e8);">⬆ 上传到云端</button>
+      <button class="btn-primary" id="cloudDownloadBtn" style="background:linear-gradient(135deg,#b8e6c7,#6ec9a3);">⬇ 从云端恢复</button>
+    </div>
+    <div id="cloudSyncResult" style="margin-top:10px;font-size:12px;text-align:center;"></div>
+  `, null, true);
+
+  const tokenInp = document.getElementById('gistToken');
+  const idInp = document.getElementById('gistId');
+  // 自动保存 token 和 gistId
+  if (tokenInp) tokenInp.oninput = () => localStorage.setItem('zhaoxi_gist_token', tokenInp.value.trim());
+  if (idInp) idInp.oninput = () => localStorage.setItem('zhaoxi_gist_id', idInp.value.trim());
+
+  document.getElementById('cloudUploadBtn').onclick = () => cloudUpload();
+  document.getElementById('cloudDownloadBtn').onclick = () => cloudDownload();
+}
+
+async function cloudUpload() {
+  const token = document.getElementById('gistToken').value.trim();
+  const gistId = document.getElementById('gistId').value.trim();
+  const result = document.getElementById('cloudSyncResult');
+  if (!token) { result.innerHTML = '<span style="color:var(--red);">请先填写 GitHub Token</span>'; return; }
+  result.innerHTML = '<span style="color:var(--text-light);">正在上传...</span>';
+  saveDataNow();
+  const content = JSON.stringify(data);
+  try {
+    let url = 'https://api.github.com/gists';
+    let method = 'POST';
+    let body = { files: { 'zhaoxi_backup.json': { content: content } }, description: '昭熹工作台数据备份' };
+    if (gistId) { url = `https://api.github.com/gists/${gistId}`; method = 'PATCH'; }
+    const resp = await fetch(url, {
+      method: method,
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!resp.ok) { const e = await resp.json(); throw new Error(e.message || resp.status); }
+    const json = await resp.json();
+    if (!gistId && json.id) {
+      localStorage.setItem('zhaoxi_gist_id', json.id);
+      document.getElementById('gistId').value = json.id;
+    }
+    const now = new Date().toLocaleString('zh-CN');
+    localStorage.setItem('zhaoxi_last_cloud_sync', now);
+    result.innerHTML = `<span style="color:var(--green);">✓ 上传成功！${now}</span>`;
+    showToast('云端同步成功 ✨');
+  } catch (e) {
+    result.innerHTML = `<span style="color:var(--red);">✗ 失败：${escapeHtml(e.message)}</span>`;
+  }
+}
+
+async function cloudDownload() {
+  const token = document.getElementById('gistToken').value.trim();
+  const gistId = document.getElementById('gistId').value.trim();
+  const result = document.getElementById('cloudSyncResult');
+  if (!token || !gistId) { result.innerHTML = '<span style="color:var(--red);">请先填写 Token 和 Gist ID</span>'; return; }
+  result.innerHTML = '<span style="color:var(--text-light);">正在下载...</span>';
+  try {
+    const resp = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const json = await resp.json();
+    const file = json.files['zhaoxi_backup.json'];
+    if (!file) throw new Error('云端无备份数据');
+    const imported = JSON.parse(file.content);
+    if (!confirm('确认从云端恢复吗？当前数据将被覆盖。')) { result.innerHTML = ''; return; }
+    data = Object.assign(JSON.parse(JSON.stringify(defaultData)), imported);
+    saveDataNow();
+    const now = new Date().toLocaleString('zh-CN');
+    localStorage.setItem('zhaoxi_last_cloud_sync', now);
+    result.innerHTML = `<span style="color:var(--green);">✓ 恢复成功！${now}</span>`;
+    showToast('云端恢复成功 ✨');
+    setTimeout(() => { closeModal(); renderPage(); }, 1500);
+  } catch (e) {
+    result.innerHTML = `<span style="color:var(--red);">✗ 失败：${escapeHtml(e.message)}</span>`;
+  }
+}
+
+function bindHomeEvents() {
+  document.querySelectorAll('.checkin-item').forEach(el => {
+    el.onclick = () => {
+      const key = el.dataset.key;
+      if (!data.checkins[currentDate]) data.checkins[currentDate] = {};
+      data.checkins[currentDate][key] = !data.checkins[currentDate][key];
+      saveData();
+      // 局部更新，避免整页重渲染
+      el.classList.toggle('done');
+      // 更新今日概览中的打卡数
+      const doneNum = Object.values(data.checkins[currentDate] || {}).filter(v => v).length;
+      const overview = document.querySelector('.card .summary-mini, [style*="已完成打卡"]');
+      if (overview) {
+        const numEl = overview.querySelector('div[style*="22px"]') || overview.querySelector('div[style*="pink-deep"]');
+        if (numEl) numEl.textContent = doneNum + '/11';
+      }
+    };
+  });
+}
+
+// =============== 日程 ===============
+function renderSchedule() {
+  const sub = currentSubPage.schedule || 'today';
+  const subNav = `
+    <div class="subnav">
+      ${Object.entries(subPagesConfig.schedule).map(([k, v]) => `
+        <div class="subnav-item ${sub === k ? 'active' : ''}" data-sub="${k}">${v}</div>
+      `).join('')}
+    </div>
+  `;
+  let body = '';
+  if (sub === 'today') body = renderScheduleToday();
+  else if (sub === 'month') body = renderScheduleMonth();
+  else if (sub === 'year') body = renderScheduleYear();
+  return subNav + body;
+}
+
+function renderScheduleToday() {
+  const selDate = data.scheduleDate || currentDate;
+  const todaySchedule = data.schedule[selDate] || [];
+  const todayTodos = (data.todos || []).filter(t => t.date === selDate);
+  // 今日重点从月度事项同步
+  const events = data.monthEvents[selDate] || [];
+  const focusText = getFocusFromEvents(selDate);
+  const dateObj = new Date(selDate);
+  const isToday = selDate === currentDate;
+  return `
+    <div class="page-header">
+      <div class="page-title">📅 ${isToday ? '今日' : '当日'}</div>
+      <div class="page-tag" style="display:flex;align-items:center;gap:6px;">
+        <input type="date" id="schedDatePick" value="${selDate}" style="border:none;background:transparent;font-size:12px;color:var(--pink-deep);font-weight:600;outline:none;">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌟 今日重点 <span style="font-weight:400;color:var(--text-light);font-size:11px;">（与月度格子同步）</span></div>
+      <textarea class="textarea" id="focusText" placeholder="用「·」分隔多项，自动同步到月度格子...">${escapeHtml(focusText)}</textarea>
+      ${events.length > 0 ? `
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+          ${events.map(ev => {
+            const cat = getCategoryColor(ev.category);
+            return `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:${cat.color};color:${cat.text};border-radius:12px;font-size:12px;font-weight:600;">${escapeHtml(ev.content)}</span>`;
+          }).join('')}
+        </div>
+      ` : ''}
+    </div>
+    <div class="card">
+      <div class="card-title">⏰ 时间安排</div>
+      <div class="timeline" id="scheduleTimeline">
+        ${todaySchedule.length === 0 ? '<div class="empty-state"><div class="emoji">📝</div><p>还没有添加日程<br>点击下方按钮添加</p></div>' : ''}
+        ${todaySchedule.map((s, i) => `
+          <div class="timeline-item">
+            <div class="timeline-time">${s.time}</div>
+            <div class="timeline-content">${escapeHtml(s.content)}</div>
+            <button class="btn-tiny" data-del-schedule="${i}">删除</button>
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <input class="input" id="newSchedTime" type="time" value="09:00" style="width:100px;">
+        <input class="input" id="newSchedContent" placeholder="日程内容..." style="flex:1;">
+        <button class="btn-primary" id="addSchedBtn" style="width:auto;padding:0 18px;">+</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">✅ 当日待办</div>
+      ${todayTodos.length === 0 ? '<div class="empty-state" style="padding:20px;"><p>暂无待办</p></div>' : ''}
+      ${todayTodos.map(t => `
+        <div class="todo-item ${t.done ? 'done' : ''}">
+          <div class="todo-check ${t.done ? 'checked' : ''}" data-todo-toggle="${t.id}">${t.done ? '✓' : ''}</div>
+          <div class="todo-body">
+            <div class="todo-title">${escapeHtml(t.title)}</div>
+            <div class="todo-meta">
+              <span class="priority priority-${t.priority === '高' ? 'high' : t.priority === '中' ? 'mid' : 'low'}">${t.priority}</span>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// 月度视图
+let monthViewYear = new Date().getFullYear();
+let monthViewMonth = new Date().getMonth();
+
+function renderScheduleMonth() {
+  const now = new Date();
+  if (!monthViewYear) monthViewYear = now.getFullYear();
+  if (monthViewMonth === undefined) monthViewMonth = now.getMonth();
+  const totalDays = new Date(monthViewYear, monthViewMonth + 1, 0).getDate();
+  const today = new Date();
+  // 按周分组成7列横向布局
+  let weeks = [];
+  let curWeek = new Array(firstWeekdayOfMonth()).fill(null);
+  for (let d = 1; d <= totalDays; d++) {
+    const dateKey = `${monthViewYear}-${String(monthViewMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const isToday = today.getFullYear() === monthViewYear && today.getMonth() === monthViewMonth && today.getDate() === d;
+    const lunar = getLunarLabel(monthViewYear, monthViewMonth + 1, d);
+    const holiday = chineseHolidays[dateKey];
+    const events = data.monthEvents[dateKey] || [];
+    curWeek.push({ d, dateKey, isToday, lunar, holiday, events });
+    if (curWeek.length === 7) { weeks.push(curWeek); curWeek = []; }
+  }
+  if (curWeek.length > 0) {
+    while (curWeek.length < 7) curWeek.push(null);
+    weeks.push(curWeek);
+  }
+  return `
+    <div class="page-header">
+      <div class="page-title">📅 ${monthViewYear}年${monthViewMonth+1}月</div>
+      <div class="page-tag" style="display:flex;align-items:center;gap:6px;">
+        <input type="month" id="mvMonthPick" value="${monthViewYear}-${String(monthViewMonth+1).padStart(2,'0')}" style="border:none;background:transparent;font-size:12px;color:var(--pink-deep);font-weight:600;outline:none;">
+      </div>
+    </div>
+    <div class="card" style="background:linear-gradient(180deg,#fff5f8,#ffe9f0);padding:10px 6px;">
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-bottom:6px;">
+        ${['日','一','二','三','四','五','六'].map(w => `<div style="text-align:center;font-size:12px;color:var(--text-light);font-weight:600;padding:4px 0;">${w}</div>`).join('')}
+      </div>
+      <div id="monthListWrap">
+        ${weeks.map((wk) => `
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:6px 0;border-bottom:1px dashed rgba(244,138,166,0.15);min-height:80px;">
+            ${wk.map(cell => cell ? `
+              <div class="mv-day-cell ${cell.isToday ? 'today' : ''} ${cell.holiday ? 'holiday' : ''}" data-mvday="${cell.dateKey}">
+                <div class="mv-day-head">
+                  <span class="mv-day-num">${cell.d}</span>
+                  <span class="mv-day-lunar">${cell.lunar}</span>
+                </div>
+                <div class="mv-day-events">
+                  ${cell.events.map(ev => {
+                    const cat = getCategoryColor(ev.category);
+                    return `<div class="mv-event-tag" style="background:${cat.color};color:${cat.text};" data-evid="${ev.id}" data-evdate="${cell.dateKey}">${escapeHtml(ev.content)}</div>`;
+                  }).join('')}
+                  ${cell.events.length === 0 ? `<div class="mv-add-hint" data-mvadd="${cell.dateKey}">+</div>` : ''}
+                </div>
+              </div>
+            ` : '<div style="background:transparent;"></div>').join('')}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--text-light);justify-content:center;">
+      ${eventCategories.map(c => `<span><span style="display:inline-block;width:10px;height:10px;background:${c.color};border-radius:2px;margin-right:4px;"></span>${c.key}</span>`).join('')}
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:8px;">点击格子查看/添加 · 点击事项删除 · 与「今日重点」自动同步</div>
+    <div id="monthDayDetail" style="margin-top:14px;"></div>
+  `;
+}
+
+function firstWeekdayOfMonth() {
+  return new Date(monthViewYear, monthViewMonth, 1).getDay();
+}
+
+// 简易农历标签（基于内置对照表，仅展示常用日期）
+function getLunarLabel(y, m, d) {
+  const key = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const holiday = chineseHolidays[key];
+  if (holiday) return holiday;
+  // 简化版：用阳历近似农历月日
+  const lunarMap = {
+    '2026-08-04': '廿', '2026-08-19': '七夕'
+  };
+  if (lunarMap[key]) return lunarMap[key];
+  // 用一个简化的偏移：取阳历月日差
+  return '';
+}
+
+// 事项分类颜色（用户指定）
+// 紫色-幸福 红色-工作 橙色-生活 绿色-娱乐 粉色-其他
+const eventCategories = [
+  { key: '幸福', color: '#c5b8e8', text: '#5a4a7a' },
+  { key: '工作', color: '#ef9a9a', text: '#7a3a3a' },
+  { key: '生活', color: '#ffd29e', text: '#7a5a3a' },
+  { key: '娱乐', color: '#b8e6c7', text: '#3a6a4a' },
+  { key: '其他', color: '#ffd9e3', text: '#7a4a5a' }
+];
+function getCategoryColor(cat) {
+  const c = eventCategories.find(e => e.key === cat);
+  return c || eventCategories[eventCategories.length - 1];
+}
+
+function pickEventColor(text) {
+  const colors = ['#ffd9e3', '#b8e6c7', '#f5d77a', '#c5b8e8', '#ffd29e', '#a8d8e8', '#ffb8c9'];
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) hash = (hash * 31 + text.charCodeAt(i)) & 0xffff;
+  return colors[hash % colors.length];
+}
+
+// 月度事项 <-> 今日重点 双向同步
+// 数据模型：data.monthEvents[dateKey] = [{id, content, category}]
+// 今日重点文本 = 该日所有事项内容用「·」连接
+function getFocusFromEvents(dateKey) {
+  const items = data.monthEvents[dateKey] || [];
+  return items.map(it => it.content).join(' · ');
+}
+// 同步：今日重点文本改变时，尝试解析为事项列表（按 · 分隔）
+function syncEventsFromFocus(dateKey, text) {
+  if (!text || !text.trim()) {
+    data.monthEvents[dateKey] = [];
+    return;
+  }
+  const parts = text.split(/[·,，\n]/).map(s => s.trim()).filter(Boolean);
+  // 保留原有事项的 category（按顺序匹配）
+  const oldItems = data.monthEvents[dateKey] || [];
+  data.monthEvents[dateKey] = parts.map((p, i) => ({
+    id: (oldItems[i] && oldItems[i].id) || ('e_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2,4)),
+    content: p,
+    category: (oldItems[i] && oldItems[i].category) || '其他'
+  }));
+}
+// 添加一条月度事项
+function addMonthEvent(dateKey, content, category) {
+  if (!data.monthEvents[dateKey]) data.monthEvents[dateKey] = [];
+  data.monthEvents[dateKey].push({
+    id: 'e_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
+    content: content,
+    category: category || '其他'
+  });
+}
+// 删除一条月度事项
+function deleteMonthEvent(dateKey, id) {
+  if (!data.monthEvents[dateKey]) return;
+  data.monthEvents[dateKey] = data.monthEvents[dateKey].filter(e => e.id !== id);
+  if (data.monthEvents[dateKey].length === 0) delete data.monthEvents[dateKey];
+}
+
+function bindScheduleMonthEvents() {
+  // 月份选择器
+  const mp = document.getElementById('mvMonthPick');
+  if (mp) {
+    mp.onchange = () => {
+      const [y, m] = mp.value.split('-');
+      monthViewYear = parseInt(y);
+      monthViewMonth = parseInt(m) - 1;
+      renderPage();
+    };
+  }
+  // 点击日期格子 —— 打开当日详情/添加面板
+  document.querySelectorAll('.mv-day-cell').forEach(d => {
+    d.onclick = (e) => {
+      // 如果点击的是事项标签，由标签自己处理删除
+      if (e.target.classList.contains('mv-event-tag')) return;
+      currentDate = d.dataset.mvday;
+      renderMonthDayDetail();
+      setTimeout(() => {
+        const det = document.getElementById('monthDayDetail');
+        if (det) det.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    };
+  });
+  // 点击 + 提示 —— 直接打开添加对话框
+  document.querySelectorAll('.mv-add-hint').forEach(h => {
+    h.onclick = (e) => {
+      e.stopPropagation();
+      currentDate = h.dataset.mvadd;
+      openMonthAddDialog();
+    };
+  });
+  // 点击事项标签 —— 直接删除
+  document.querySelectorAll('.mv-event-tag').forEach(tag => {
+    tag.onclick = (e) => {
+      e.stopPropagation();
+      const id = tag.dataset.evid;
+      const dateKey = tag.dataset.evdate;
+      if (confirm('删除该事项吗？')) {
+        deleteMonthEvent(dateKey, id);
+        saveData();
+        renderPage();
+      }
+    };
+  });
+}
+
+function openMonthAddDialog() {
+  showModal(`➕ 添加事项 - ${formatDate(new Date(currentDate))}`, `
+    <div class="form-row">
+      <label class="label">事项内容</label>
+      <input class="input" id="mvNewContent" placeholder="如：开会、瑜伽、约会..." autofocus>
+    </div>
+    <div class="form-row">
+      <label class="label">分类</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${eventCategories.map((c, i) => `
+          <label style="display:flex;align-items:center;gap:4px;padding:6px 12px;background:#fff5f8;border-radius:14px;font-size:13px;cursor:pointer;border:1.5px solid transparent;" class="cat-label" data-cat="${c.key}">
+            <input type="radio" name="catRadio" value="${c.key}" ${i === 0 ? 'checked' : ''} style="display:none;">
+            <span style="display:inline-block;width:12px;height:12px;background:${c.color};border-radius:3px;"></span>
+            ${c.key}
+          </label>
+        `).join('')}
+      </div>
+    </div>
+    <button class="btn-primary" id="mvAddBtn">添加</button>
+  `, null, true);
+  // 分类选择样式
+  document.querySelectorAll('.cat-label').forEach(lbl => {
+    lbl.onclick = () => {
+      document.querySelectorAll('.cat-label').forEach(l => l.style.borderColor = 'transparent');
+      lbl.style.borderColor = 'var(--pink-deep)';
+      lbl.querySelector('input').checked = true;
+    };
+    if (lbl.querySelector('input').checked) lbl.style.borderColor = 'var(--pink-deep)';
+  });
+  const btn = document.getElementById('mvAddBtn');
+  if (btn) {
+    btn.onclick = () => {
+      const c = document.getElementById('mvNewContent').value.trim();
+      if (!c) { alert('请输入事项内容'); return; }
+      const cat = document.querySelector('input[name="catRadio"]:checked').value;
+      addMonthEvent(currentDate, c, cat);
+      saveData();
+      closeModal();
+      renderPage();
+    };
+  }
+}
+
+function renderMonthDayDetail() {
+  const el = document.getElementById('monthDayDetail');
+  if (!el) return;
+  const dateObj = new Date(currentDate);
+  const holiday = chineseHolidays[currentDate];
+  const events = data.monthEvents[currentDate] || [];
+  const focusText = getFocusFromEvents(currentDate);
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">📌 ${formatDate(dateObj)} 星期${getWeekday(dateObj)}${holiday ? ` · ${holiday}` : ''}</div>
+      <div class="form-row">
+        <label class="label">🌟 今日重点 <span style="font-weight:400;color:var(--text-light);font-size:11px;">（与月度格子同步）</span></label>
+        <textarea class="textarea" id="mvFocus" placeholder="用「·」分隔多项，自动同步到月度格子...">${escapeHtml(focusText)}</textarea>
+      </div>
+      <div class="form-row">
+        <label class="label">事项列表</label>
+        ${events.length === 0 ? '<div class="text-light" style="padding:8px 0;">暂无事项，点击下方添加</div>' : ''}
+        ${events.map(ev => {
+          const cat = getCategoryColor(ev.category);
+          return `
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;padding:6px 8px;background:#fff5f8;border-radius:10px;">
+              <span style="display:inline-block;width:10px;height:10px;background:${cat.color};border-radius:3px;flex-shrink:0;"></span>
+              <span style="font-size:11px;color:${cat.text};font-weight:600;width:36px;flex-shrink:0;">${ev.category}</span>
+              <span style="flex:1;font-size:13px;color:var(--text-dark);">${escapeHtml(ev.content)}</span>
+              <button class="btn-tiny" data-mv-del-ev="${ev.id}">×</button>
+            </div>
+          `;
+        }).join('')}
+        <div style="display:flex;gap:6px;margin-top:10px;align-items:center;">
+          <select id="mvNewCat" class="select" style="width:auto;padding:8px;font-size:12px;">
+            ${eventCategories.map(c => `<option value="${c.key}">${c.key}</option>`).join('')}
+          </select>
+          <input class="input" id="mvNewContent" placeholder="事项内容..." style="flex:1;">
+          <button class="btn-icon" id="mvAddBtn" style="background:var(--pink-deep);color:white;">+</button>
+        </div>
+      </div>
+    </div>
+  `;
+  // 今日重点输入：解析为事项列表（按 · 分隔）
+  const f = document.getElementById('mvFocus');
+  if (f) {
+    f.oninput = () => {
+      syncEventsFromFocus(currentDate, f.value);
+      saveData();
+    };
+  }
+  // 添加事项
+  const addBtn = document.getElementById('mvAddBtn');
+  if (addBtn) {
+    addBtn.onclick = () => {
+      const c = document.getElementById('mvNewContent').value.trim();
+      if (!c) { alert('请输入事项内容'); return; }
+      const cat = document.getElementById('mvNewCat').value;
+      addMonthEvent(currentDate, c, cat);
+      saveData();
+      renderMonthDayDetail();
+      // 同时刷新月度格子
+      refreshMonthGridOnly();
+    };
+  }
+  // 删除事项
+  document.querySelectorAll('[data-mv-del-ev]').forEach(b => {
+    b.onclick = () => {
+      deleteMonthEvent(currentDate, b.dataset.mvDelEv);
+      saveData();
+      renderMonthDayDetail();
+      refreshMonthGridOnly();
+    };
+  });
+}
+
+// 只刷新月度格子（不重渲染详情，避免输入框失焦）
+function refreshMonthGridOnly() {
+  // 简单做法：重渲染整个页面
+  renderPage();
+  // 重新打开详情
+  setTimeout(() => renderMonthDayDetail(), 0);
+}
+
+function bindScheduleTodayEvents() {
+  const selDate = data.scheduleDate || currentDate;
+  // 日期选择器
+  const datePick = document.getElementById('schedDatePick');
+  if (datePick) {
+    datePick.onchange = () => {
+      data.scheduleDate = datePick.value;
+      saveData();
+      renderPage();
+    };
+  }
+  const focusEl = document.getElementById('focusText');
+  if (focusEl) {
+    focusEl.oninput = () => {
+      // 今日重点 与 月度事项 双向同步
+      syncEventsFromFocus(selDate, focusEl.value);
+      saveData();
+    };
+  }
+  document.querySelectorAll('[data-del-schedule]').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.dataset.delSchedule);
+      if (data.schedule[selDate]) {
+        data.schedule[selDate].splice(idx, 1);
+        saveData();
+        renderPage();
+      }
+    };
+  });
+  const addBtn = document.getElementById('addSchedBtn');
+  if (addBtn) {
+    addBtn.onclick = () => {
+      const t = document.getElementById('newSchedTime').value;
+      const c = document.getElementById('newSchedContent').value.trim();
+      if (!c) { alert('请输入日程内容'); return; }
+      if (!data.schedule[selDate]) data.schedule[selDate] = [];
+      data.schedule[selDate].push({ time: t, content: c });
+      data.schedule[selDate].sort((a, b) => a.time.localeCompare(b.time));
+      saveData();
+      renderPage();
+    };
+  }
+  document.querySelectorAll('[data-todo-toggle]').forEach(el => {
+    el.onclick = () => {
+      const id = el.dataset.todoToggle;
+      const todo = (data.todos || []).find(t => t.id === id);
+      if (todo) { todo.done = !todo.done; saveData(); renderPage(); }
+    };
+  });
+}
+
+function bindScheduleMonthEvents() {
+  document.getElementById('mvPrev').onclick = () => {
+    monthViewMonth--;
+    if (monthViewMonth < 0) { monthViewMonth = 11; monthViewYear--; }
+    renderPage();
+  };
+  document.getElementById('mvNext').onclick = () => {
+    monthViewMonth++;
+    if (monthViewMonth > 11) { monthViewMonth = 0; monthViewYear++; }
+    renderPage();
+  };
+  renderMonthViewDays();
+}
+
+// 中国传统节日
+const chineseHolidays = {
+  '2026-01-01': '元旦', '2026-02-17': '春节', '2026-02-18': '春节', '2026-02-19': '春节', '2026-02-20': '春节', '2026-02-21': '春节', '2026-02-22': '春节', '2026-02-23': '春节',
+  '2026-04-04': '清明', '2026-04-05': '清明', '2026-04-06': '清明',
+  '2026-05-01': '劳动节', '2026-05-02': '劳动节', '2026-05-03': '劳动节', '2026-05-04': '劳动节', '2026-05-05': '劳动节',
+  '2026-06-19': '端午', '2026-06-20': '端午', '2026-06-21': '端午',
+  '2026-09-25': '中秋', '2026-09-26': '中秋', '2026-09-27': '中秋',
+  '2026-10-01': '国庆', '2026-10-02': '国庆', '2026-10-03': '国庆', '2026-10-04': '国庆', '2026-10-05': '国庆', '2026-10-06': '国庆', '2026-10-07': '国庆',
+  '2027-01-01': '元旦', '2027-02-06': '春节', '2027-02-07': '春节', '2027-02-08': '春节', '2027-02-09': '春节', '2027-02-10': '春节', '2027-02-11': '春节', '2027-02-12': '春节',
+  '2027-04-05': '清明',
+  '2027-05-01': '劳动节',
+  '2027-06-09': '端午',
+  '2027-09-15': '中秋',
+  '2027-10-01': '国庆'
+};
+
+let currentYear = 2026;
+let currentMonth = 7; // 0-indexed, 7 means August
+
+function renderScheduleYear() {
+  const now = new Date();
+  if (!currentYear) currentYear = now.getFullYear();
+  if (currentMonth === undefined) currentMonth = now.getMonth();
+  return `
+    <div class="page-header">
+      <div class="page-title">📅 年度日历</div>
+      <div class="page-tag">从2026年起持续更新</div>
+    </div>
+    <div class="card" style="padding:0;background:transparent;box-shadow:none;">
+      <div class="calendar">
+        <div class="cal-header">
+          <div class="cal-nav">
+            <button class="btn-icon" id="yearPrev">‹</button>
+            <button class="btn-icon" id="yearNext">›</button>
+          </div>
+          <div class="cal-title">${currentYear}年 ${currentMonth + 1}月</div>
+          <div class="cal-nav">
+            <button class="btn-icon" id="monthPrev">‹</button>
+            <button class="btn-icon" id="monthNext">›</button>
+          </div>
+        </div>
+        <div class="cal-weekdays">
+          ${['日','一','二','三','四','五','六'].map(w => `<div class="cal-weekday">${w}</div>`).join('')}
+        </div>
+        <div class="cal-days" id="calDays"></div>
+      </div>
+      <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:8px;">
+        <span style="display:inline-block;width:10px;height:10px;background:#ffe0e0;border-radius:2px;margin-right:4px;"></span>传统节日
+        <span style="display:inline-block;width:10px;height:10px;background:var(--pink-deep);border-radius:2px;margin:0 4px 0 12px;"></span>今天
+      </div>
+    </div>
+    <div class="card" id="dayDetail">
+      <div class="empty-state" style="padding:20px;"><p>点击日期查看当日详情</p></div>
+    </div>
+  `;
+}
+
+function renderCalendarDays() {
+  const el = document.getElementById('calDays');
+  if (!el) return;
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const today = new Date();
+  let html = '';
+  for (let i = 0; i < firstDay.getDay(); i++) html += '<div class="cal-day empty"></div>';
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
+    const holiday = chineseHolidays[dateKey];
+    const hasEvent = (data.schedule[dateKey] || []).length > 0 || (data.todos || []).some(t => t.date === dateKey);
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    else if (holiday) cls += ' holiday';
+    if (hasEvent) cls += ' has-event';
+    html += `<div class="${cls}" data-day="${dateKey}">
+      <div class="num">${d}</div>
+      ${holiday ? `<div class="tag">${holiday.substring(0,2)}</div>` : ''}
+    </div>`;
+  }
+  el.innerHTML = html;
+  el.querySelectorAll('.cal-day:not(.empty)').forEach(d => {
+    d.onclick = () => {
+      currentDate = d.dataset.day;
+      renderDayDetail();
+      document.querySelectorAll('.cal-day').forEach(x => x.style.outline = '');
+      d.style.outline = '2px solid var(--pink-deep)';
+    };
+  });
+}
+
+function renderDayDetail() {
+  const el = document.getElementById('dayDetail');
+  if (!el) return;
+  const dateObj = new Date(currentDate);
+  const holiday = chineseHolidays[currentDate];
+  const daySchedule = data.schedule[currentDate] || [];
+  const dayTodos = (data.todos || []).filter(t => t.date === currentDate);
+  const focus = data.schedule['__focus_' + currentDate] || '';
+  el.innerHTML = `
+    <div class="card-title">📌 ${formatDate(dateObj)} 星期${getWeekday(dateObj)}${holiday ? ` · ${holiday}` : ''}</div>
+    <div class="form-row">
+      <label class="label">今日重点</label>
+      <textarea class="textarea" id="dayFocus" placeholder="写下今天最重要的事...">${escapeHtml(focus)}</textarea>
+    </div>
+    <div class="form-row">
+      <label class="label">时间安排</label>
+      ${daySchedule.length === 0 ? '<div class="text-light" style="padding:8px 0;">暂无安排</div>' : ''}
+      ${daySchedule.map((s, i) => `
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
+          <span style="font-size:12px;color:var(--pink-deep);font-weight:600;width:50px;">${s.time}</span>
+          <span style="flex:1;font-size:13px;">${escapeHtml(s.content)}</span>
+          <button class="btn-tiny" data-day-del="${i}">×</button>
+        </div>
+      `).join('')}
+      <div style="display:flex;gap:6px;margin-top:8px;">
+        <input class="input" id="dayNewTime" type="time" value="09:00" style="width:100px;">
+        <input class="input" id="dayNewContent" placeholder="日程..." style="flex:1;">
+        <button class="btn-icon" id="dayAddBtn" style="background:var(--pink-deep);color:white;">+</button>
+      </div>
+    </div>
+    ${dayTodos.length > 0 ? `
+      <div class="form-row">
+        <label class="label">待办</label>
+        ${dayTodos.map(t => `<div style="font-size:13px;padding:4px 0;">${t.done ? '✅' : '⭕'} ${escapeHtml(t.title)}</div>`).join('')}
+      </div>
+    ` : ''}
+  `;
+  const focusIn = document.getElementById('dayFocus');
+  if (focusIn) focusIn.oninput = () => { data.schedule['__focus_' + currentDate] = focusIn.value; saveData(); };
+  const addBtn = document.getElementById('dayAddBtn');
+  if (addBtn) {
+    addBtn.onclick = () => {
+      const t = document.getElementById('dayNewTime').value;
+      const c = document.getElementById('dayNewContent').value.trim();
+      if (!c) return;
+      if (!data.schedule[currentDate]) data.schedule[currentDate] = [];
+      data.schedule[currentDate].push({ time: t, content: c });
+      data.schedule[currentDate].sort((a, b) => a.time.localeCompare(b.time));
+      saveData();
+      renderCalendarDays();
+      renderDayDetail();
+    };
+  }
+  document.querySelectorAll('[data-day-del]').forEach(b => {
+    b.onclick = () => {
+      const i = parseInt(b.dataset.dayDel);
+      if (data.schedule[currentDate]) { data.schedule[currentDate].splice(i, 1); saveData(); renderCalendarDays(); renderDayDetail(); }
+    };
+  });
+}
+
+function bindScheduleYearEvents() {
+  document.getElementById('yearPrev').onclick = () => { currentYear--; renderPage(); };
+  document.getElementById('yearNext').onclick = () => { currentYear++; renderPage(); };
+  document.getElementById('monthPrev').onclick = () => {
+    currentMonth--;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    renderPage();
+  };
+  document.getElementById('monthNext').onclick = () => {
+    currentMonth++;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    renderPage();
+  };
+  renderCalendarDays();
+}
+
+// =============== 自我管理 ===============
+function renderSelf() {
+  const sub = currentSubPage.self || 'important';
+  const subNav = `
+    <div class="subnav">
+      ${Object.entries(subPagesConfig.self).map(([k, v]) => `
+        <div class="subnav-item ${sub === k ? 'active' : ''}" data-sub="${k}">${v}</div>
+      `).join('')}
+    </div>
+  `;
+  let body = '';
+  if (sub === 'important') body = renderDocs('importantDocs', '重要目标', '🎯');
+  else if (sub === 'year') body = renderDocs('yearPlans', '年度计划', '📋');
+  else if (sub === 'month') body = renderDocs('monthPlans', '月度计划', '📆');
+  else if (sub === 'finance') body = renderFinance();
+  return subNav + body;
+}
+
+function renderDocs(storeKey, title, icon) {
+  const docs = (data[storeKey] || []).slice().sort((a, b) => b.createdAt - a.createdAt);
+  return `
+    <div class="page-header">
+      <div class="page-title">${icon} ${title}</div>
+      <div class="page-tag">${docs.length}个文档</div>
+    </div>
+    <div class="card" id="docsList">
+      ${docs.length === 0 ? `
+        <div class="empty-state">
+          <div class="emoji">📝</div>
+          <p>还没有创建任何文档<br>点击下方按钮新建</p>
+        </div>
+      ` : docs.map(d => `
+        <div class="doc-card" data-doc-id="${d.id}">
+          <div class="doc-icon">${icon}</div>
+          <div class="doc-info">
+            <div class="doc-title">${escapeHtml(d.title)}</div>
+            <div class="doc-meta">${new Date(d.createdAt).toLocaleString('zh-CN')}</div>
+          </div>
+          <div class="doc-arrow">›</div>
+        </div>
+      `).join('')}
+    </div>
+    <button class="btn-primary" id="newDocBtn">+ 新建文档</button>
+  `;
+}
+
+function bindDocEvents(storeKey) {
+  document.getElementById('newDocBtn').onclick = () => {
+    showModal(`新建文档`, `
+      <div class="form-row">
+        <label class="label">文档标题</label>
+        <input class="input" id="newDocTitle" placeholder="请输入文档标题...">
+      </div>
+      <button class="btn-primary" id="confirmNewDoc">创建文档</button>
+    `, () => {
+      const t = document.getElementById('newDocTitle').value.trim();
+      if (!t) { alert('请输入标题'); return; }
+      if (!data[storeKey]) data[storeKey] = [];
+      data[storeKey].push({
+        id: 'd_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        title: t,
+        createdAt: Date.now(),
+        content: ''
+      });
+      saveData();
+      closeModal();
+      renderPage();
+    });
+  };
+  document.querySelectorAll('.doc-card').forEach(c => {
+    c.onclick = () => {
+      const id = c.dataset.docId;
+      const doc = (data[storeKey] || []).find(d => d.id === id);
+      if (doc) openDocEditor(storeKey, doc);
+    };
+  });
+}
+
+function openDocEditor(storeKey, doc) {
+  const original = doc.content || '';
+  showModal(`✏️ ${escapeHtml(doc.title)}`, `
+    <div class="diary-page" style="min-height:300px;">
+      <textarea class="textarea" id="docContent" style="min-height:280px;">${escapeHtml(original)}</textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn-secondary" id="renameDocBtn" style="flex:1;">重命名</button>
+      <button class="btn-secondary" id="deleteDocBtn" style="flex:1;color:#d05050;border-color:#d05050;">删除</button>
+      <button class="btn-primary" id="saveDocBtn" style="flex:2;">保存</button>
+    </div>
+  `, null, true);
+  document.getElementById('saveDocBtn').onclick = () => {
+    doc.content = document.getElementById('docContent').value;
+    saveData();
+    showToast('保存成功 ✨');
+    closeModal();
+    renderPage();
+  };
+  document.getElementById('renameDocBtn').onclick = () => {
+    const newT = prompt('新标题', doc.title);
+    if (newT && newT.trim()) { doc.title = newT.trim(); saveData(); closeModal(); openDocEditor(storeKey, doc); }
+  };
+  document.getElementById('deleteDocBtn').onclick = () => {
+    if (confirm('确认删除该文档吗？')) {
+      data[storeKey] = data[storeKey].filter(d => d.id !== doc.id);
+      saveData();
+      closeModal();
+      renderPage();
+    }
+  };
+}
+
+// =============== 财务计划 ===============
+const financeCategories = [
+  { key: '收入', type: 'income' },
+  { key: '房租', type: 'expense' },
+  { key: '情侣', type: 'expense' },
+  { key: '取悦自己', type: 'expense' },
+  { key: '日常', type: 'expense' },
+  { key: '餐饮', type: 'expense' },
+  { key: '购物', type: 'expense' },
+  { key: '工作', type: 'expense' },
+  { key: '学习', type: 'expense' },
+  { key: '娱乐', type: 'expense' },
+  { key: '交通', type: 'expense' },
+  { key: '社交', type: 'expense' },
+  { key: '小狗', type: 'expense' },
+  { key: '妈妈', type: 'expense' },
+  { key: '医疗', type: 'expense' },
+  { key: '其他', type: 'expense' }
+];
+
+let currentFinanceYear = new Date().getFullYear();
+let currentFinanceMonth = new Date().getMonth() + 1;
+
+function renderFinance() {
+  const months = [];
+  for (let m = 1; m <= 12; m++) months.push(m);
+  return `
+    <div class="page-header">
+      <div class="page-title">💰 财务计划</div>
+      <div class="page-tag">${currentFinanceYear}年</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 选择月份</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+        ${months.map(m => `
+          <div class="subnav-item ${currentFinanceMonth === m ? 'active' : ''}" data-fmonth="${m}" style="text-align:center;">${m}月</div>
+        `).join('')}
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;align-items:center;">
+        <button class="btn-icon" id="financeYearPrev">‹</button>
+        <span style="font-size:13px;font-weight:600;">${currentFinanceYear}年</span>
+        <button class="btn-icon" id="financeYearNext">›</button>
+      </div>
+    </div>
+    ${renderFinanceTable()}
+    ${renderFinanceIncomeDetail()}
+    <div class="card">
+      <div class="card-title">📊 年度总结 ${currentFinanceYear}</div>
+      ${renderFinanceYearSummary()}
+    </div>
+  `;
+}
+
+// 收入详情表格
+const incomeDetailCategories = ['自媒体收入', '医美收入', '其他收入'];
+
+function renderFinanceIncomeDetail() {
+  const key = `${currentFinanceYear}-${String(currentFinanceMonth).padStart(2, '0')}`;
+  if (!data.finances[key]) {
+    data.finances[key] = { rows: {}, incomeDetail: {} };
+    financeCategories.forEach(c => data.finances[key].rows[c.key] = { target: '', actual: '', effect: '' });
+  }
+  if (!data.finances[key].incomeDetail) data.finances[key].incomeDetail = {};
+  incomeDetailCategories.forEach(c => {
+    if (!data.finances[key].incomeDetail[c]) data.finances[key].incomeDetail[c] = '';
+  });
+  const incData = data.finances[key].incomeDetail;
+  return `
+    <div class="card">
+      <div class="card-title">💼 收入详情 ${currentFinanceMonth}月</div>
+      <div style="overflow-x:auto;">
+        <table class="fin-table">
+          <thead>
+            <tr><th>分类</th><th>详情</th></tr>
+          </thead>
+          <tbody>
+            ${incomeDetailCategories.map(cat => `
+              <tr class="row-income">
+                <td class="cat">${cat}</td>
+                <td><input data-inckey="${key}|${cat}" value="${escapeAttr(incData[cat] || '')}" placeholder="可编辑收入详情..."></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function renderFinanceTable() {
+  const key = `${currentFinanceYear}-${String(currentFinanceMonth).padStart(2, '0')}`;
+  if (!data.finances[key]) {
+    data.finances[key] = { rows: {} };
+    financeCategories.forEach(c => data.finances[key].rows[c.key] = { target: '', actual: '', effect: '' });
+  }
+  const monthData = data.finances[key];
+  return `
+    <div class="card">
+      <div class="card-title">📝 ${currentFinanceMonth}月财务明细</div>
+      <div style="overflow-x:auto;">
+        <table class="fin-table">
+          <thead>
+            <tr><th>分类</th><th>目标</th><th>实际</th><th>效果</th></tr>
+          </thead>
+          <tbody>
+            ${financeCategories.map(cat => {
+              const row = monthData.rows[cat.key] || { target: '', actual: '', effect: '' };
+              return `
+                <tr class="${cat.type === 'income' ? 'row-income' : ''}">
+                  <td class="cat">${cat.key}</td>
+                  <td><input data-finkey="${key}|${cat.key}|target" value="${escapeAttr(row.target)}" placeholder="0.00"></td>
+                  <td><input data-finkey="${key}|${cat.key}|actual" value="${escapeAttr(row.actual)}" placeholder="0.00"></td>
+                  <td><input data-finkey="${key}|${cat.key}|effect" value="${escapeAttr(row.effect)}" placeholder="备注"></td>
+                </tr>
+              `;
+            }).join('')}
+            <tr>
+              <td class="cat total">总计</td>
+              <td class="total" id="ftotalTarget">-</td>
+              <td class="total" id="ftotalActual">-</td>
+              <td class="total">结余</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="financeCalcResult" style="margin-top:8px;font-size:12px;color:var(--text-light);"></div>
+    </div>
+  `;
+}
+
+function calcFinanceRow() {
+  const key = `${currentFinanceYear}-${String(currentFinanceMonth).padStart(2, '0')}`;
+  const monthData = data.finances[key];
+  if (!monthData) return;
+  let totalTarget = 0, totalActual = 0, incomeActual = 0;
+  let hasTarget = false, hasActual = false;
+  financeCategories.forEach(cat => {
+    const row = monthData.rows[cat.key] || {};
+    if (row.target && !isNaN(parseFloat(row.target))) {
+      const v = parseFloat(row.target);
+      totalTarget += cat.type === 'income' ? v : -v;
+      hasTarget = true;
+    }
+    if (row.actual && !isNaN(parseFloat(row.actual))) {
+      const v = parseFloat(row.actual);
+      if (cat.type === 'income') incomeActual += v;
+      else totalActual += v;
+      hasActual = true;
+    }
+  });
+  const tt = document.getElementById('ftotalTarget');
+  const ta = document.getElementById('ftotalActual');
+  if (tt) tt.textContent = hasTarget ? (totalTarget >= 0 ? '+' : '') + totalTarget.toFixed(2) : '-';
+  if (ta) ta.textContent = hasActual ? '-' + totalActual.toFixed(2) : '-';
+  const calc = document.getElementById('financeCalcResult');
+  if (calc) {
+    const balance = incomeActual - totalActual;
+    calc.innerHTML = `实际结余：<span style="color:${balance >= 0 ? 'var(--green)' : 'var(--red)'};font-weight:700;">${balance >= 0 ? '+' : ''}${balance.toFixed(2)}</span>`;
+  }
+}
+
+function renderFinanceYearSummary() {
+  let yearIncome = 0, yearExpense = 0;
+  const monthly = [];
+  for (let m = 1; m <= 12; m++) {
+    const k = `${currentFinanceYear}-${String(m).padStart(2, '0')}`;
+    const month = data.finances[k];
+    let mi = 0, me = 0;
+    if (month) {
+      financeCategories.forEach(cat => {
+        const row = month.rows[cat.key] || {};
+        const v = parseFloat(row.actual) || 0;
+        if (cat.type === 'income') mi += v;
+        else me += v;
+      });
+    }
+    monthly.push({ m, mi, me, balance: mi - me });
+    yearIncome += mi;
+    yearExpense += me;
+  }
+  const balance = yearIncome - yearExpense;
+  return `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;">
+      <div style="background:#fff5f8;padding:10px;border-radius:12px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-light);">年收入</div>
+        <div style="font-size:16px;font-weight:700;color:var(--green);">+${yearIncome.toFixed(2)}</div>
+      </div>
+      <div style="background:#fff5f8;padding:10px;border-radius:12px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-light);">年支出</div>
+        <div style="font-size:16px;font-weight:700;color:var(--red);">-${yearExpense.toFixed(2)}</div>
+      </div>
+      <div style="background:#fff5f8;padding:10px;border-radius:12px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-light);">结余</div>
+        <div style="font-size:16px;font-weight:700;color:${balance >= 0 ? 'var(--green)' : 'var(--red)'};">${balance >= 0 ? '+' : ''}${balance.toFixed(2)}</div>
+      </div>
+    </div>
+    <table class="fin-table">
+      <thead><tr><th>月份</th><th>收入</th><th>支出</th><th>结余</th></tr></thead>
+      <tbody>
+        ${monthly.map(mt => `
+          <tr>
+            <td class="cat">${mt.m}月</td>
+            <td>${mt.mi ? '+' + mt.mi.toFixed(2) : '-'}</td>
+            <td>${mt.me ? '-' + mt.me.toFixed(2) : '-'}</td>
+            <td class="total" style="color:${mt.balance >= 0 ? 'var(--green)' : 'var(--red)'};">${mt.mi || mt.me ? (mt.balance >= 0 ? '+' : '') + mt.balance.toFixed(2) : '-'}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function bindFinanceEvents() {
+  document.querySelectorAll('[data-fmonth]').forEach(el => {
+    el.onclick = () => { currentFinanceMonth = parseInt(el.dataset.fmonth); renderPage(); };
+  });
+  document.getElementById('financeYearPrev').onclick = () => { currentFinanceYear--; renderPage(); };
+  document.getElementById('financeYearNext').onclick = () => { currentFinanceYear++; renderPage(); };
+  document.querySelectorAll('[data-finkey]').forEach(inp => {
+    inp.oninput = () => {
+      const [key, cat, field] = inp.dataset.finkey.split('|');
+      if (!data.finances[key]) data.finances[key] = { rows: {} };
+      if (!data.finances[key].rows[cat]) data.finances[key].rows[cat] = { target: '', actual: '', effect: '' };
+      data.finances[key].rows[cat][field] = inp.value;
+      saveData();
+      calcFinanceRow();
+    };
+  });
+  // 收入详情输入
+  document.querySelectorAll('[data-inckey]').forEach(inp => {
+    inp.oninput = () => {
+      const [key, cat] = inp.dataset.inckey.split('|');
+      if (!data.finances[key]) data.finances[key] = { rows: {} };
+      if (!data.finances[key].incomeDetail) data.finances[key].incomeDetail = {};
+      data.finances[key].incomeDetail[cat] = inp.value;
+      saveData();
+    };
+  });
+  calcFinanceRow();
+}
+
+// =============== 幸福生活 ===============
+function renderHappiness() {
+  const sub = currentSubPage.happiness || '舒婷';
+  // 动态子标签：合并默认配置 + data.happiness 中的所有 key
+  const defaultKeys = Object.keys(subPagesConfig.happiness);
+  const allKeys = defaultKeys.slice();
+  Object.keys(data.happiness).forEach(k => { if (!allKeys.includes(k)) allKeys.push(k); });
+  const subNav = `
+    <div class="subnav">
+      ${allKeys.map(k => `
+        <div class="subnav-item ${sub === k ? 'active' : ''}" data-sub="${escapeAttr(k)}">${escapeHtml(k)}</div>
+      `).join('')}
+      <div class="subnav-item" id="addHappinessBtn" style="background:#fff;color:var(--pink-deep);border:1.5px dashed var(--pink-mid);">＋</div>
+    </div>
+  `;
+  const title = sub;
+  const icons = { 舒婷: '💕', 毕生所愿: '🌟', '2027-10-18': '💍', 妈妈: '👩', 灰灰: '🐱', 姐姐妹妹: '👭', 旅游计划: '✈️', 我的婚礼: '👰', 我的家: '🏠', 爱用清单: '💄', 欲望清单: '🛍️' };
+  const icon = icons[sub] || '📖';
+  return subNav + `
+    <div class="page-header">
+      <div class="page-title">${icon} ${escapeHtml(title)}</div>
+      <div class="page-tag">日记本</div>
+    </div>
+    <div class="diary-page">
+      <textarea class="textarea" id="happinessText" placeholder="在这里记录关于${escapeHtml(title)}的点滴...">${escapeHtml(data.happiness[sub] || '')}</textarea>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px;">自动保存 · 永久记录</div>
+  `;
+}
+
+function bindHappinessEvents() {
+  const sub = currentSubPage.happiness || '舒婷';
+  const ta = document.getElementById('happinessText');
+  if (ta) {
+    let timer;
+    ta.oninput = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        data.happiness[sub] = ta.value;
+        saveData();
+      }, 500);
+    };
+  }
+  // 添加子标签
+  const addBtn = document.getElementById('addHappinessBtn');
+  if (addBtn) {
+    addBtn.onclick = () => {
+      showModal('➕ 新建子标题', `
+        <div class="form-row">
+          <label class="label">子标题名称</label>
+          <input class="input" id="newHappinessName" placeholder="如：我的心愿单...">
+        </div>
+        <button class="btn-primary" id="confirmNewHappiness">创建</button>
+      `, () => {
+        const n = document.getElementById('newHappinessName').value.trim();
+        if (!n) { alert('请输入名称'); return; }
+        if (data.happiness[n] === undefined) data.happiness[n] = '';
+        saveData();
+        closeModal();
+        navigateTo('happiness', n);
+      });
+    };
+  }
+}
+
+// =============== 健康美丽 ===============
+function renderHealth() {
+  const sub = currentSubPage.health || 'weight';
+  // 合并默认子标签 + 自定义子标签
+  const defaultKeys = Object.keys(subPagesConfig.health);
+  const customKeys = Object.keys(data.healthCustom || {});
+  const allKeys = defaultKeys.concat(customKeys.filter(k => !defaultKeys.includes(k)));
+  const subNav = `
+    <div class="subnav">
+      ${allKeys.map(k => `
+        <div class="subnav-item ${sub === k ? 'active' : ''}" data-sub="${escapeAttr(k)}">${subPagesConfig.health[k] || escapeHtml(k)}</div>
+      `).join('')}
+      <div class="subnav-item" id="addHealthBtn" style="background:#fff;color:var(--pink-deep);border:1.5px dashed var(--pink-mid);">＋</div>
+    </div>
+  `;
+  let body = '';
+  if (sub === 'weight') body = renderWeight();
+  else if (sub === 'shaping') body = renderShaping();
+  else if (sub === 'beauty') body = renderBeautyDiary();
+  else if (sub === 'appearance') body = renderAppearance();
+  else if (sub === 'routine') body = renderRoutineDiary();
+  else body = renderHealthCustom(sub);
+  return subNav + body;
+}
+
+function renderHealthCustom(name) {
+  if (!data.healthCustom) data.healthCustom = {};
+  return `
+    <div class="page-header">
+      <div class="page-title">📖 ${escapeHtml(name)}</div>
+      <div class="page-tag">日记本</div>
+    </div>
+    <div class="diary-page">
+      <textarea class="textarea" id="healthCustomText" placeholder="在这里记录...">${escapeHtml(data.healthCustom[name] || '')}</textarea>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px;">自动保存 · 永久记录</div>
+  `;
+}
+
+let weightCalYear = new Date().getFullYear();
+let weightCalMonth = new Date().getMonth();
+
+function renderWeight() {
+  return `
+    <div class="page-header">
+      <div class="page-title">⚖️ 体重记录</div>
+      <div class="page-tag">${weightCalYear}年${weightCalMonth+1}月</div>
+    </div>
+    <div class="card">
+      <div class="cal-header">
+        <div class="cal-nav">
+          <button class="btn-icon" id="wPrev">‹</button>
+          <button class="btn-icon" id="wNext">›</button>
+        </div>
+        <div class="cal-title">${weightCalYear}年${weightCalMonth+1}月</div>
+        <div></div>
+      </div>
+      <div class="cal-weekdays" style="margin-top:10px;">
+        ${['日','一','二','三','四','五','六'].map(w => `<div class="cal-weekday">${w}</div>`).join('')}
+      </div>
+      <div class="weight-grid" id="weightGrid"></div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text-light);display:flex;gap:12px;justify-content:center;">
+        <span><span style="display:inline-block;width:10px;height:10px;background:var(--pink-deep);border-radius:2px;margin-right:4px;"></span>已记录</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#ffd9d9;border-radius:2px;margin-right:4px;"></span>生理期</span>
+      </div>
+    </div>
+    <div class="card" id="weightDetail">
+      <div class="empty-state" style="padding:20px;"><p>点击日期记录体重</p></div>
+    </div>
+  `;
+}
+
+function renderWeightDays() {
+  const el = document.getElementById('weightGrid');
+  if (!el) return;
+  const firstDay = new Date(weightCalYear, weightCalMonth, 1);
+  const lastDay = new Date(weightCalYear, weightCalMonth + 1, 0);
+  let html = '';
+  for (let i = 0; i < firstDay.getDay(); i++) html += '<div></div>';
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const key = `${weightCalYear}-${String(weightCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const w = data.weight[key];
+    let cls = 'weight-day';
+    if (w) cls += w.period ? ' period' : ' recorded';
+    html += `<div class="${cls}" data-wday="${key}">
+      ${w ? `<div class="w">${w.period ? '🩸' : w.weight}</div>` : `<div class="w">${d}</div>`}
+    </div>`;
+  }
+  el.innerHTML = html;
+  el.querySelectorAll('.weight-day').forEach(d => {
+    d.onclick = () => {
+      currentDate = d.dataset.wday;
+      renderWeightDetail();
+    };
+  });
+}
+
+function renderWeightDetail() {
+  const el = document.getElementById('weightDetail');
+  if (!el) return;
+  const w = data.weight[currentDate] || {};
+  el.innerHTML = `
+    <div class="card-title">📌 ${formatDate(new Date(currentDate))}</div>
+    <div class="form-row">
+      <label class="label">体重 (kg)</label>
+      <input class="input" id="weightVal" type="number" step="0.1" value="${w.weight || ''}" placeholder="请输入体重...">
+    </div>
+    <div class="form-row">
+      <label class="label" style="display:flex;align-items:center;gap:6px;">
+        <input type="checkbox" id="periodCheck" ${w.period ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--pink-deep);"> 生理期
+      </label>
+    </div>
+    <button class="btn-primary" id="saveWeightBtn">保存</button>
+  `;
+  document.getElementById('saveWeightBtn').onclick = () => {
+    const v = document.getElementById('weightVal').value;
+    const p = document.getElementById('periodCheck').checked;
+    if (!v && !p) { delete data.weight[currentDate]; }
+    else { data.weight[currentDate] = { weight: v, period: p }; }
+    saveData();
+    renderWeightDays();
+    showToast('已保存 ✨');
+  };
+}
+
+function bindWeightEvents() {
+  document.getElementById('wPrev').onclick = () => {
+    weightCalMonth--;
+    if (weightCalMonth < 0) { weightCalMonth = 11; weightCalYear--; }
+    renderPage();
+  };
+  document.getElementById('wNext').onclick = () => {
+    weightCalMonth++;
+    if (weightCalMonth > 11) { weightCalMonth = 0; weightCalYear++; }
+    renderPage();
+  };
+  renderWeightDays();
+}
+
+function renderShaping() {
+  const subItems = [
+    { key: '天鹅颈', icon: '🦢' },
+    { key: '直角肩', icon: '💪' },
+    { key: '沙漏腰', icon: '⏳' },
+    { key: '蜜桃臀', icon: '🍑' },
+    { key: '酒杯腿', icon: '🍷' },
+    { key: '软开', icon: '🤸' }
+  ];
+  return `
+    <div class="page-header">
+      <div class="page-title">💃 塑形</div>
+      <div class="page-tag">点击进入</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      ${subItems.map(s => `
+        <div class="doc-card" data-shape="${s.key}" style="flex-direction:column;text-align:center;padding:20px 10px;">
+          <div style="font-size:36px;margin-bottom:8px;">${s.icon}</div>
+          <div class="doc-title">${s.key}</div>
+          <div class="doc-meta">点击记录</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function bindShapingEvents() {
+  document.querySelectorAll('[data-shape]').forEach(el => {
+    el.onclick = () => {
+      const key = el.dataset.shape;
+      const original = data.shaping[key] || '';
+      showModal(`💃 ${key}`, `
+        <div class="diary-page">
+          <textarea class="textarea" id="shapingText" placeholder="记录${key}的训练计划、心得...">${escapeHtml(original)}</textarea>
+        </div>
+        <button class="btn-primary" id="saveShaping" style="margin-top:10px;">保存</button>
+      `, null, true);
+      document.getElementById('saveShaping').onclick = () => {
+        data.shaping[key] = document.getElementById('shapingText').value;
+        saveData();
+        showToast('已保存 ✨');
+        closeModal();
+      };
+    };
+  });
+}
+
+function renderBeautyDiary() {
+  return `
+    <div class="page-header">
+      <div class="page-title">💄 美貌日记</div>
+      <div class="page-tag">每日记录</div>
+    </div>
+    <div class="diary-page">
+      <textarea class="textarea" id="beautyText" placeholder="记录今天的护肤、妆容、变美小心得...">${escapeHtml(data.beautyDiary || '')}</textarea>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px;">自动保存</div>
+  `;
+}
+
+function renderAppearance() {
+  const sub = currentSubPage['appearance-sub'] || '穿搭';
+  const subs = ['穿搭', '化妆', '造型', 'poss'];
+  return `
+    <div class="page-header">
+      <div class="page-title">👗 外观</div>
+      <div class="page-tag">${sub}</div>
+    </div>
+    <div class="subnav">
+      ${subs.map(s => `<div class="subnav-item ${sub === s ? 'active' : ''}" data-asub="${s}">${s}</div>`).join('')}
+    </div>
+    <div class="diary-page">
+      <textarea class="textarea" id="appearanceText" placeholder="记录${sub}的灵感、心得...">${escapeHtml(data.appearance[sub] || '')}</textarea>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px;">自动保存</div>
+  `;
+}
+
+function renderRoutineDiary() {
+  return `
+    <div class="page-header">
+      <div class="page-title">😴 作息日记</div>
+      <div class="page-tag">健康生活</div>
+    </div>
+    <div class="diary-page">
+      <textarea class="textarea" id="routineText" placeholder="记录每天的作息时间、睡眠质量...">${escapeHtml(data.routineDiary || '')}</textarea>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px;">自动保存</div>
+  `;
+}
+
+function bindBeautyEvents() {
+  bindAutoSave('beautyText', () => data.beautyDiary = document.getElementById('beautyText').value);
+}
+
+function bindAppearanceEvents() {
+  const sub = currentSubPage['appearance-sub'] || '穿搭';
+  bindAutoSave('appearanceText', () => data.appearance[sub] = document.getElementById('appearanceText').value);
+  document.querySelectorAll('[data-asub]').forEach(el => {
+    el.onclick = () => {
+      currentSubPage['appearance-sub'] = el.dataset.asub;
+      renderPage();
+    };
+  });
+}
+
+function bindRoutineEvents() {
+  bindAutoSave('routineText', () => data.routineDiary = document.getElementById('routineText').value);
+}
+
+function bindHealthCustomEvents() {
+  const sub = currentSubPage.health;
+  bindAutoSave('healthCustomText', () => data.healthCustom[sub] = document.getElementById('healthCustomText').value);
+}
+
+function bindAddHealthBtn() {
+  const addBtn = document.getElementById('addHealthBtn');
+  if (addBtn) {
+    addBtn.onclick = () => {
+      showModal('➕ 新建子标题', `
+        <div class="form-row">
+          <label class="label">子标题名称</label>
+          <input class="input" id="newHealthName" placeholder="如：护发心得...">
+        </div>
+        <button class="btn-primary" id="confirmNewHealth">创建</button>
+      `, () => {
+        const n = document.getElementById('newHealthName').value.trim();
+        if (!n) { alert('请输入名称'); return; }
+        if (!data.healthCustom) data.healthCustom = {};
+        if (data.healthCustom[n] === undefined) data.healthCustom[n] = '';
+        saveData();
+        closeModal();
+        navigateTo('health', n);
+      });
+    };
+  }
+}
+
+function bindAutoSave(id, setter) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let timer;
+  el.oninput = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { setter(); saveData(); }, 500);
+  };
+}
+
+function bindGrowthCustomEvents() {
+  const sub = currentSubPage.growth;
+  bindAutoSave('growthCustomText', () => data.growthCustom[sub] = document.getElementById('growthCustomText').value);
+}
+
+function bindAddGrowthBtn() {
+  const addBtn = document.getElementById('addGrowthBtn');
+  if (addBtn) {
+    addBtn.onclick = () => {
+      showModal('➕ 新建子标题', `
+        <div class="form-row">
+          <label class="label">子标题名称</label>
+          <input class="input" id="newGrowthName" placeholder="如：读书笔记...">
+        </div>
+        <button class="btn-primary" id="confirmNewGrowth">创建</button>
+      `, () => {
+        const n = document.getElementById('newGrowthName').value.trim();
+        if (!n) { alert('请输入名称'); return; }
+        if (!data.growthCustom) data.growthCustom = {};
+        if (data.growthCustom[n] === undefined) data.growthCustom[n] = '';
+        saveData();
+        closeModal();
+        navigateTo('growth', n);
+      });
+    };
+  }
+}
+
+// =============== 个人提升 ===============
+function renderGrowth() {
+  const sub = currentSubPage.growth || 'skill';
+  // 合并默认 + 自定义
+  const defaultKeys = Object.keys(subPagesConfig.growth);
+  const customKeys = Object.keys(data.growthCustom || {});
+  const allKeys = defaultKeys.concat(customKeys.filter(k => !defaultKeys.includes(k)));
+  const subNav = `
+    <div class="subnav">
+      ${allKeys.map(k => `
+        <div class="subnav-item ${sub === k ? 'active' : ''}" data-sub="${escapeAttr(k)}">${subPagesConfig.growth[k] || escapeHtml(k)}</div>
+      `).join('')}
+      <div class="subnav-item" id="addGrowthBtn" style="background:#fff;color:var(--pink-deep);border:1.5px dashed var(--pink-mid);">＋</div>
+    </div>
+  `;
+  let body = '';
+  if (sub === 'skill') body = renderSkills();
+  else if (sub === 'ten') body = renderTen();
+  else if (sub === 'sixty') body = renderSixty();
+  else body = renderGrowthCustom(sub);
+  return subNav + body;
+}
+
+function renderGrowthCustom(name) {
+  if (!data.growthCustom) data.growthCustom = {};
+  return `
+    <div class="page-header">
+      <div class="page-title">📖 ${escapeHtml(name)}</div>
+      <div class="page-tag">日记本</div>
+    </div>
+    <div class="diary-page">
+      <textarea class="textarea" id="growthCustomText" placeholder="在这里记录...">${escapeHtml(data.growthCustom[name] || '')}</textarea>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px;">自动保存 · 永久记录</div>
+  `;
+}
+
+function renderSkills() {
+  const skills = (data.skills || []).slice().sort((a, b) => b.createdAt - a.createdAt);
+  return `
+    <div class="page-header">
+      <div class="page-title">🌱 技能提升</div>
+      <div class="page-tag">${skills.length}项技能</div>
+    </div>
+    <div id="skillsList">
+      ${skills.length === 0 ? '<div class="empty-state"><div class="emoji">📚</div><p>还没有添加技能<br>点击下方添加</p></div>' : ''}
+      ${skills.map(s => `
+        <div class="doc-card" data-skill="${s.id}">
+          <div class="doc-icon">🌱</div>
+          <div class="doc-info">
+            <div class="doc-title">${escapeHtml(s.title)}</div>
+            <div class="doc-meta">${new Date(s.createdAt).toLocaleDateString('zh-CN')}</div>
+          </div>
+          <div class="doc-arrow">›</div>
+        </div>
+      `).join('')}
+    </div>
+    <button class="btn-primary" id="newSkillBtn">+ 添加技能</button>
+  `;
+}
+
+function bindSkillEvents() {
+  document.getElementById('newSkillBtn').onclick = () => {
+    showModal('添加新技能', `
+      <div class="form-row">
+        <label class="label">技能名称</label>
+        <input class="input" id="newSkillTitle" placeholder="如：英语、绘画...">
+      </div>
+      <button class="btn-primary" id="confirmNewSkill">添加</button>
+    `, () => {
+      const t = document.getElementById('newSkillTitle').value.trim();
+      if (!t) return;
+      if (!data.skills) data.skills = [];
+      data.skills.push({
+        id: 's_' + Date.now(),
+        title: t,
+        createdAt: Date.now(),
+        content: ''
+      });
+      saveData();
+      closeModal();
+      renderPage();
+    });
+  };
+  document.querySelectorAll('[data-skill]').forEach(el => {
+    el.onclick = () => {
+      const id = el.dataset.skill;
+      const s = (data.skills || []).find(x => x.id === id);
+      if (s) {
+        showModal(`🌱 ${escapeHtml(s.title)}`, `
+          <div class="diary-page">
+            <textarea class="textarea" id="skillContent" style="min-height:280px;">${escapeHtml(s.content || '')}</textarea>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="btn-secondary" id="delSkillBtn" style="flex:1;color:#d05050;border-color:#d05050;">删除</button>
+            <button class="btn-primary" id="saveSkillBtn" style="flex:2;">保存</button>
+          </div>
+        `, null, true);
+        document.getElementById('saveSkillBtn').onclick = () => {
+          s.content = document.getElementById('skillContent').value;
+          saveData();
+          showToast('已保存 ✨');
+          closeModal();
+        };
+        document.getElementById('delSkillBtn').onclick = () => {
+          if (confirm('确认删除吗？')) {
+            data.skills = data.skills.filter(x => x.id !== id);
+            saveData();
+            closeModal();
+            renderPage();
+          }
+        };
+      }
+    };
+  });
+}
+
+// 36*10
+let tenYear = 2026;
+let tenMonth = 7; // 0-indexed
+
+function renderTen() {
+  // 每组10天合并为2项内容
+  const groups = [
+    { label: '1-10号', start: 1, end: 10 },
+    { label: '11-20号', start: 11, end: 20 },
+    { label: '21-31号', start: 21, end: 31 }
+  ];
+  const monthKey = `${tenYear}-${String(tenMonth+1).padStart(2,'0')}`;
+  // 数据结构：{ monthKey: [{ content1, status1, content2, status2 }, ...] } 共3组
+  if (!data.tenGroups[monthKey]) {
+    data.tenGroups[monthKey] = groups.map(g => ({
+      content1: '', status1: '未完成',
+      content2: '', status2: '未完成'
+    }));
+    saveData();
+  }
+  const groupsData = data.tenGroups[monthKey];
+  return `
+    <div class="page-header">
+      <div class="page-title">📅 36*10</div>
+      <div class="page-tag" style="display:flex;align-items:center;gap:6px;">
+        <input type="month" id="tenDatePick" value="${monthKey}" style="border:none;background:transparent;font-size:12px;color:var(--pink-deep);font-weight:600;outline:none;">
+      </div>
+    </div>
+    ${groups.map((g, gi) => {
+      const gd = groupsData[gi] || { content1: '', status1: '未完成', content2: '', status2: '未完成' };
+      return `
+        <div class="ten-list">
+          <div style="font-size:14px;font-weight:700;color:var(--pink-deep);margin-bottom:8px;">📍 ${g.label}（${tenYear}.${tenMonth+1}.${g.start} ~ ${tenYear}.${tenMonth+1}.${g.end}）</div>
+          <div class="ten-item" style="flex-direction:column;align-items:stretch;gap:6px;padding:10px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:var(--pink-deep);font-weight:700;width:28px;">项目1</span>
+              <input data-ten2="${gi}|content1" value="${escapeAttr(gd.content1)}" placeholder="这10天要完成的事项1..." style="flex:1;border:none;background:#fff5f8;border-radius:8px;padding:6px 8px;font-size:12px;color:var(--text-dark);outline:none;">
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:var(--text-light);width:28px;">状态</span>
+              <select data-ten2="${gi}|status1" style="flex:1;border:none;background:#fff5f8;border-radius:8px;padding:5px 4px;font-size:12px;color:var(--text-dark);outline:none;">
+                <option ${gd.status1 === '未完成' ? 'selected' : ''}>未完成</option>
+                <option ${gd.status1 === '进行中' ? 'selected' : ''}>进行中</option>
+                <option ${gd.status1 === '已完成' ? 'selected' : ''}>已完成</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+              <span style="font-size:11px;color:var(--pink-deep);font-weight:700;width:28px;">项目2</span>
+              <input data-ten2="${gi}|content2" value="${escapeAttr(gd.content2)}" placeholder="这10天要完成的事项2..." style="flex:1;border:none;background:#fff5f8;border-radius:8px;padding:6px 8px;font-size:12px;color:var(--text-dark);outline:none;">
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:var(--text-light);width:28px;">状态</span>
+              <select data-ten2="${gi}|status2" style="flex:1;border:none;background:#fff5f8;border-radius:8px;padding:5px 4px;font-size:12px;color:var(--text-dark);outline:none;">
+                <option ${gd.status2 === '未完成' ? 'selected' : ''}>未完成</option>
+                <option ${gd.status2 === '进行中' ? 'selected' : ''}>进行中</option>
+                <option ${gd.status2 === '已完成' ? 'selected' : ''}>已完成</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+function bindTenEvents() {
+  // 日期选择
+  const dp = document.getElementById('tenDatePick');
+  if (dp) {
+    dp.onchange = () => {
+      const [y, m] = dp.value.split('-');
+      tenYear = parseInt(y);
+      tenMonth = parseInt(m) - 1;
+      renderPage();
+    };
+  }
+  document.querySelectorAll('[data-ten2]').forEach(el => {
+    el.onchange = el.oninput = () => {
+      const [gi, field] = el.dataset.ten2.split('|');
+      const monthKey = `${tenYear}-${String(tenMonth+1).padStart(2,'0')}`;
+      const i = parseInt(gi);
+      if (data.tenGroups[monthKey] && data.tenGroups[monthKey][i]) {
+        data.tenGroups[monthKey][i][field] = el.value;
+        saveData();
+      }
+    };
+  });
+}
+
+// 60天
+function renderSixty() {
+  const sixty = (data.sixtyDays || []).slice().sort((a, b) => b.startDate - a.startDate);
+  return `
+    <div class="page-header">
+      <div class="page-title">🎯 60天打卡</div>
+      <div class="page-tag">${sixty.length}个模块</div>
+    </div>
+    <div id="sixtyList">
+      ${sixty.length === 0 ? '<div class="empty-state"><div class="emoji">🎯</div><p>还没有创建60天模块<br>点击下方新建</p></div>' : ''}
+      ${sixty.map(s => {
+        const doneCount = (s.days || []).filter(d => d.done).length;
+        return `
+          <div class="doc-card" data-sixty="${s.id}">
+            <div class="doc-icon">🎯</div>
+            <div class="doc-info">
+              <div class="doc-title">${escapeHtml(s.title)}</div>
+              <div class="doc-meta">${s.startDate} · 已完成 ${doneCount}/60</div>
+            </div>
+            <div class="doc-arrow">›</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <button class="btn-primary" id="newSixtyBtn">+ 新建60天</button>
+  `;
+}
+
+function bindSixtyEvents() {
+  document.getElementById('newSixtyBtn').onclick = () => {
+    showModal('新建60天模块', `
+      <div class="form-row">
+        <label class="label">模块标题</label>
+        <input class="input" id="newSixtyTitle" placeholder="如：每日运动...">
+      </div>
+      <div class="form-row">
+        <label class="label">开始日期</label>
+        <input class="input" id="newSixtyDate" type="date" value="${currentDate}">
+      </div>
+      <button class="btn-primary" id="confirmNewSixty">创建</button>
+    `, () => {
+      const t = document.getElementById('newSixtyTitle').value.trim();
+      const d = document.getElementById('newSixtyDate').value;
+      if (!t) return;
+      if (!data.sixtyDays) data.sixtyDays = [];
+      const start = new Date(d);
+      const days = [];
+      for (let i = 0; i < 60; i++) {
+        const dt = new Date(start);
+        dt.setDate(start.getDate() + i);
+        days.push({ date: formatDateKey(dt), done: false, note: '' });
+      }
+      data.sixtyDays.push({
+        id: 's60_' + Date.now(),
+        title: t,
+        startDate: d,
+        days: days,
+        summary: ''
+      });
+      saveData();
+      closeModal();
+      renderPage();
+    });
+  };
+  document.querySelectorAll('[data-sixty]').forEach(el => {
+    el.onclick = () => {
+      const id = el.dataset.sixty;
+      const s = (data.sixtyDays || []).find(x => x.id === id);
+      if (s) openSixtyDetail(s);
+    };
+  });
+}
+
+function openSixtyDetail(s) {
+  const doneCount = s.days.filter(d => d.done).length;
+  showModal(`🎯 ${escapeHtml(s.title)}`, `
+    <div style="text-align:center;font-size:12px;color:var(--text-light);margin-bottom:10px;">
+      开始：${s.startDate} · 已完成 ${doneCount}/60
+    </div>
+    <div class="day-block" id="dayBlock">
+      ${s.days.map((d, i) => `
+        <div class="day-cell ${d.done ? 'done' : ''} ${d.date === currentDate ? 'today' : ''}" data-day-idx="${i}">
+          ${i + 1}
+        </div>
+      `).join('')}
+    </div>
+    <div id="dayEditPanel" style="margin-top:14px;"></div>
+    <div class="form-row" style="margin-top:14px;">
+      <label class="label">总结</label>
+      <textarea class="textarea" id="sixtySummary" placeholder="写下你的60天总结...">${escapeHtml(s.summary || '')}</textarea>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-secondary" id="delSixtyBtn" style="flex:1;color:#d05050;border-color:#d05050;">删除</button>
+      <button class="btn-primary" id="saveSixtyBtn" style="flex:2;">保存</button>
+    </div>
+  `, null, true);
+
+  document.querySelectorAll('[data-day-idx]').forEach(el => {
+    el.onclick = () => {
+      const i = parseInt(el.dataset.dayIdx);
+      const d = s.days[i];
+      const panel = document.getElementById('dayEditPanel');
+      panel.innerHTML = `
+        <div class="card" style="background:#fff5f8;box-shadow:none;margin:0;">
+          <div class="form-row">
+            <label class="label">第 ${i+1} 天 - ${d.date}</label>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+              <input type="checkbox" id="dayDone" ${d.done ? 'checked' : ''} style="width:20px;height:20px;accent-color:var(--pink-deep);">
+              <span style="font-size:13px;">已完成</span>
+            </div>
+            <textarea class="textarea" id="dayNote" placeholder="今日打卡内容...">${escapeHtml(d.note || '')}</textarea>
+            <button class="btn-primary" id="saveDay" style="margin-top:8px;">保存</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('saveDay').onclick = () => {
+        s.days[i].done = document.getElementById('dayDone').checked;
+        s.days[i].note = document.getElementById('dayNote').value;
+        saveData();
+        openSixtyDetail(s);
+      };
+    };
+  });
+
+  document.getElementById('saveSixtyBtn').onclick = () => {
+    s.summary = document.getElementById('sixtySummary').value;
+    saveData();
+    showToast('已保存 ✨');
+    closeModal();
+    renderPage();
+  };
+  document.getElementById('delSixtyBtn').onclick = () => {
+    if (confirm('确认删除此60天模块？')) {
+      data.sixtyDays = data.sixtyDays.filter(x => x.id !== s.id);
+      saveData();
+      closeModal();
+      renderPage();
+    }
+  };
+}
+
+// =============== 笔记本 ===============
+function renderNotebook() {
+  const notes = (data.notebooks || []).slice().sort((a, b) => b.createdAt - a.createdAt);
+  return `
+    <div class="page-header">
+      <div class="page-title">📔 笔记本</div>
+      <div class="page-tag">${notes.length}本笔记</div>
+    </div>
+    <div id="notebookList">
+      ${notes.length === 0 ? `
+        <div class="empty-state">
+          <div class="emoji">📔</div>
+          <p>还没有创建笔记本<br>点击下方按钮新建</p>
+        </div>
+      ` : notes.map(n => `
+        <div class="doc-card" data-notebook="${n.id}">
+          <div class="doc-icon">📔</div>
+          <div class="doc-info">
+            <div class="doc-title">${escapeHtml(n.title)}</div>
+            <div class="doc-meta">${new Date(n.createdAt).toLocaleString('zh-CN')}</div>
+          </div>
+          <div class="doc-arrow">›</div>
+        </div>
+      `).join('')}
+    </div>
+    <button class="btn-primary" id="newNotebookBtn">+ 新建笔记本</button>
+  `;
+}
+
+function bindNotebookEvents() {
+  document.getElementById('newNotebookBtn').onclick = () => {
+    showModal('新建笔记本', `
+      <div class="form-row">
+        <label class="label">笔记本标题</label>
+        <input class="input" id="newNotebookTitle" placeholder="请输入标题...">
+      </div>
+      <button class="btn-primary" id="confirmNewNotebook">创建</button>
+    `, () => {
+      const t = document.getElementById('newNotebookTitle').value.trim();
+      if (!t) { alert('请输入标题'); return; }
+      if (!data.notebooks) data.notebooks = [];
+      data.notebooks.push({
+        id: 'n_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        title: t,
+        createdAt: Date.now(),
+        content: ''
+      });
+      saveData();
+      closeModal();
+      renderPage();
+    });
+  };
+  document.querySelectorAll('[data-notebook]').forEach(c => {
+    c.onclick = () => {
+      const id = c.dataset.notebook;
+      const note = (data.notebooks || []).find(n => n.id === id);
+      if (note) openNotebookEditor(note);
+    };
+  });
+}
+
+function openNotebookEditor(note) {
+  showModal(`📔 ${escapeHtml(note.title)}`, `
+    <div class="diary-page" style="min-height:300px;">
+      <textarea class="textarea" id="notebookContent" style="min-height:280px;">${escapeHtml(note.content || '')}</textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn-secondary" id="renameNotebookBtn" style="flex:1;">重命名</button>
+      <button class="btn-secondary" id="deleteNotebookBtn" style="flex:1;color:#d05050;border-color:#d05050;">删除</button>
+      <button class="btn-primary" id="saveNotebookBtn" style="flex:2;">保存</button>
+    </div>
+  `, null, true);
+  document.getElementById('saveNotebookBtn').onclick = () => {
+    note.content = document.getElementById('notebookContent').value;
+    saveData();
+    showToast('保存成功 ✨');
+    closeModal();
+    renderPage();
+  };
+  document.getElementById('renameNotebookBtn').onclick = () => {
+    const newT = prompt('新标题', note.title);
+    if (newT && newT.trim()) { note.title = newT.trim(); saveData(); closeModal(); openNotebookEditor(note); }
+  };
+  document.getElementById('deleteNotebookBtn').onclick = () => {
+    if (confirm('确认删除该笔记本吗？')) {
+      data.notebooks = data.notebooks.filter(n => n.id !== note.id);
+      saveData();
+      closeModal();
+      renderPage();
+    }
+  };
+}
+
+// =============== 打分系统 ===============
+function renderScore() {
+  const selDate = data.scoreDate || currentDate;
+  const today = data.scores[selDate] || { work: 0, life: 0, health: 0, growth: 0, quote: '' };
+  const total = (parseInt(today.work) || 0) + (parseInt(today.life) || 0) + (parseInt(today.health) || 0) + (parseInt(today.growth) || 0);
+  // 历史
+  const history = Object.keys(data.scores).sort().reverse().slice(0, 10);
+  const avgAll = history.length > 0 ? (history.reduce((sum, k) => sum + (data.scores[k].total || 0), 0) / history.length).toFixed(1) : 0;
+  const dateObj = new Date(selDate);
+  const isToday = selDate === currentDate;
+  return `
+    <div class="page-header">
+      <div class="page-title">⭐ ${isToday ? '今日' : '当日'}打分</div>
+      <div class="page-tag" style="display:flex;align-items:center;gap:6px;">
+        <input type="date" id="scoreDatePick" value="${selDate}" style="border:none;background:transparent;font-size:12px;color:var(--pink-deep);font-weight:600;outline:none;">
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-row">
+        <div class="score-label">💼 工作 (40)</div>
+        <div class="score-bar"><div class="score-fill" style="width:${(today.work/40)*100}%;"></div></div>
+        <input type="number" class="score-input" data-sf="work" value="${today.work || 0}" min="0" max="40">
+      </div>
+      <div class="score-row">
+        <div class="score-label">💖 幸福 (20)</div>
+        <div class="score-bar"><div class="score-fill" style="width:${(today.life/20)*100}%;"></div></div>
+        <input type="number" class="score-input" data-sf="life" value="${today.life || 0}" min="0" max="20">
+      </div>
+      <div class="score-row">
+        <div class="score-label">🌸 健康 (20)</div>
+        <div class="score-bar"><div class="score-fill" style="width:${(today.health/20)*100}%;"></div></div>
+        <input type="number" class="score-input" data-sf="health" value="${today.health || 0}" min="0" max="20">
+      </div>
+      <div class="score-row">
+        <div class="score-label">🌱 提升 (20)</div>
+        <div class="score-bar"><div class="score-fill" style="width:${(today.growth/20)*100}%;"></div></div>
+        <input type="number" class="score-input" data-sf="growth" value="${today.growth || 0}" min="0" max="20">
+      </div>
+      <div class="score-total">
+        <div class="num">${total}</div>
+        <div class="label">今日总分 / 100</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">💬 当天一句话</div>
+      <textarea class="textarea" id="scoreQuote" placeholder="今天最想记录的一句话...">${escapeHtml(today.quote || '')}</textarea>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 分数总览</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
+        <div style="background:#fff5f8;padding:10px;border-radius:12px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-light);">已记录</div>
+          <div style="font-size:20px;font-weight:700;color:var(--pink-deep);">${history.length}</div>
+          <div style="font-size:10px;color:var(--text-light);">天</div>
+        </div>
+        <div style="background:#fff5f8;padding:10px;border-radius:12px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-light);">平均分</div>
+          <div style="font-size:20px;font-weight:700;color:var(--pink-deep);">${avgAll}</div>
+          <div style="font-size:10px;color:var(--text-light);">分</div>
+        </div>
+        <div style="background:#fff5f8;padding:10px;border-radius:12px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-light);">今日</div>
+          <div style="font-size:20px;font-weight:700;color:var(--pink-deep);">${total}</div>
+          <div style="font-size:10px;color:var(--text-light);">分</div>
+        </div>
+      </div>
+      <div class="section-title">最近记录</div>
+      ${history.length === 0 ? '<div class="empty-state" style="padding:20px;"><p>还没有记录</p></div>' : history.map(k => {
+        const s = data.scores[k];
+        return `<div class="score-day">
+          <div class="score-date">${k}</div>
+          <div class="score-val">${s.total || 0}</div>
+          <div class="score-quote">${escapeHtml(s.quote || '')}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function bindScoreEvents() {
+  const selDate = data.scoreDate || currentDate;
+  // 日期选择器
+  const datePick = document.getElementById('scoreDatePick');
+  if (datePick) {
+    datePick.onchange = () => {
+      data.scoreDate = datePick.value;
+      saveData();
+      renderPage();
+    };
+  }
+  document.querySelectorAll('[data-sf]').forEach(inp => {
+    inp.oninput = () => {
+      if (!data.scores[selDate]) data.scores[selDate] = { work: 0, life: 0, health: 0, growth: 0, quote: '' };
+      data.scores[selDate][inp.dataset.sf] = parseInt(inp.value) || 0;
+      const s = data.scores[selDate];
+      s.total = (s.work || 0) + (s.life || 0) + (s.health || 0) + (s.growth || 0);
+      saveData();
+      const totalEl = document.querySelector('.score-total .num');
+      if (totalEl) totalEl.textContent = s.total;
+    };
+  });
+  const q = document.getElementById('scoreQuote');
+  if (q) {
+    let timer;
+    q.oninput = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (!data.scores[selDate]) data.scores[selDate] = { work: 0, life: 0, health: 0, growth: 0, quote: '' };
+        data.scores[selDate].quote = q.value;
+        saveData();
+      }, 500);
+    };
+  }
+}
+
+// =============== 页面事件绑定 ===============
+function bindPageEvents() {
+  // 通用子导航
+  document.querySelectorAll('.subnav-item[data-sub]').forEach(el => {
+    el.onclick = () => {
+      navigateTo(currentPage, el.dataset.sub);
+    };
+  });
+  // 路由到绑定
+  if (currentPage === 'home') { bindHomeEvents(); bindBackupEvents(); }
+  else if (currentPage === 'schedule') {
+    if (currentSubPage.schedule === 'today') bindScheduleTodayEvents();
+    else if (currentSubPage.schedule === 'month') bindScheduleMonthEvents();
+    else if (currentSubPage.schedule === 'year') bindScheduleYearEvents();
+  }
+  else if (currentPage === 'self') {
+    const sub = currentSubPage.self || 'important';
+    if (sub === 'important') bindDocEvents('importantDocs');
+    else if (sub === 'year') bindDocEvents('yearPlans');
+    else if (sub === 'month') bindDocEvents('monthPlans');
+    else if (sub === 'finance') bindFinanceEvents();
+  }
+  else if (currentPage === 'happiness') bindHappinessEvents();
+  else if (currentPage === 'health') {
+    const sub = currentSubPage.health || 'weight';
+    if (sub === 'weight') bindWeightEvents();
+    else if (sub === 'shaping') bindShapingEvents();
+    else if (sub === 'beauty') bindBeautyEvents();
+    else if (sub === 'appearance') bindAppearanceEvents();
+    else if (sub === 'routine') bindRoutineEvents();
+    else bindHealthCustomEvents();
+    bindAddHealthBtn();
+  }
+  else if (currentPage === 'growth') {
+    const sub = currentSubPage.growth || 'skill';
+    if (sub === 'skill') bindSkillEvents();
+    else if (sub === 'ten') bindTenEvents();
+    else if (sub === 'sixty') bindSixtyEvents();
+    else bindGrowthCustomEvents();
+    bindAddGrowthBtn();
+  }
+  else if (currentPage === 'notebook') bindNotebookEvents();
+  else if (currentPage === 'score') bindScoreEvents();
+}
+
+// =============== 模态框 ===============
+function showModal(title, content, onConfirm, noFooter) {
+  const mask = document.getElementById('modalMask');
+  const modal = document.getElementById('modalContent');
+  modal.innerHTML = `
+    <div class="between" style="margin-bottom:14px;">
+      <h3 style="margin:0;">${title}</h3>
+      <button class="btn-icon" id="closeModal">×</button>
+    </div>
+    ${content}
+  `;
+  mask.classList.add('active');
+  document.getElementById('closeModal').onclick = closeModal;
+  mask.onclick = (e) => { if (e.target === mask && !noFooter) closeModal(); };
+  if (onConfirm) {
+    const btn = modal.querySelector('#confirmNewDoc, #confirmNewSkill, #confirmNewSixty');
+    if (btn) btn.onclick = onConfirm;
+  }
+}
+function closeModal() {
+  document.getElementById('modalMask').classList.remove('active');
+}
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(74,51,64,0.85);color:white;padding:10px 20px;border-radius:20px;font-size:13px;z-index:9999;animation:fadeIn 0.3s;';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 1500);
+}
+
+// =============== 工具 ===============
+function escapeHtml(s) {
+  if (s === undefined || s === null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) {
+  return escapeHtml(s);
+}
+
+// =============== 时钟更新 ===============
+function updateClock() {
+  const now = new Date();
+  const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const st = document.getElementById('statusTime');
+  if (st) st.textContent = time;
+  const bt = document.getElementById('bigTime');
+  if (bt) bt.textContent = time;
+}
+setInterval(updateClock, 60000);
+updateClock();
+
+// =============== 启动 ===============
+renderSidebar();
+renderPage();
+
+</script>
+</body>
+</html>
