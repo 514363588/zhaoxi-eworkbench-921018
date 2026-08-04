@@ -1328,9 +1328,6 @@ function bindScheduleTodayEvents() {
       saveData();
       renderPage();
     };
-      saveData();
-      renderPage();
-    };
   }
   const focusEl = document.getElementById('focusText');
   if (focusEl) {
@@ -1370,20 +1367,6 @@ function bindScheduleTodayEvents() {
       if (todo) { todo.done = !todo.done; saveData(); renderPage(); }
     };
   });
-}
-
-function bindScheduleMonthEvents() {
-  document.getElementById('mvPrev').onclick = () => {
-    monthViewMonth--;
-    if (monthViewMonth < 0) { monthViewMonth = 11; monthViewYear--; }
-    renderPage();
-  };
-  document.getElementById('mvNext').onclick = () => {
-    monthViewMonth++;
-    if (monthViewMonth > 11) { monthViewMonth = 0; monthViewYear++; }
-    renderPage();
-  };
-  renderMonthViewDays();
 }
 
 // 中国传统节日
